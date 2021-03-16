@@ -5,8 +5,11 @@ const mongodbqo  = require("./mongodbqo"); //.working;
 const mongodbops = require("./mongodbops");
 const texttoimage = require("text-to-image");
 const cors = require('cors');
+const conroom = require("./controllers/conroom");
 
 const canvas = require('canvas');
+var bodyParser = require('body-parser');
+
 canvas.registerFont('Playfair.ttf', { family: 'Playfont' });
 // const { registerFont } = require('canvas');
 
@@ -25,6 +28,7 @@ await mongodbops.ping(uri).catch(console.dir);
 await mongodbops.add(uri, "7 Main St", "dining room").catch(console.dir);
 
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (req, res, next)=>{
 	console.log('... first handler');
@@ -155,6 +159,11 @@ app.get('/rooms/:id', async (req, res)=>{
 	// res.json(reqDoc);
 	res.status(200);
 });
+
+app.post('/rooms', async (req, res)=>{
+		await conroom.addRoom(req, res);
+	}
+);
 
 app.listen(3000, () => {
   console.log('server started');
