@@ -25,6 +25,7 @@ const RoomSchema = new Schema({
 	}
 });
 
-const Rooms = mongoose.model('RoomsCol', RoomSchema);
+let colName = "roomsCOL";
+const Rooms = mongoose.model('RoomsCol', RoomSchema, colName);
 
 exports.Rooms = Rooms;

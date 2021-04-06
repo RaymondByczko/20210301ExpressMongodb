@@ -6,6 +6,7 @@ const mongodbops = require("./mongodbops");
 const texttoimage = require("text-to-image");
 const cors = require('cors');
 const conroom = require("./controllers/conroom");
+const pug = require('pug');
 
 const canvas = require('canvas');
 var bodyParser = require('body-parser');
@@ -15,6 +16,8 @@ canvas.registerFont('Playfair.ttf', { family: 'Playfont' });
 
 async function mainapp() {
 const app = express();
+app.set('view engine', 'pug');
+app.set('views', './views');
 
 let i=process.env.I;
 let j=process.env.J;
@@ -28,7 +31,7 @@ await mongodbops.ping(uri).catch(console.dir);
 await mongodbops.add(uri, "7 Main St", "dining room").catch(console.dir);
 
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res, next)=>{
 	console.log('... first handler');
@@ -47,7 +50,17 @@ app.get('/', (req, res, next)=>{
 
 app.get('/', (req, res) => {
 	console.log('... app.get');
-  res.send('Hello Express app-enhanced!')
+  res.render('index', {title:'Express Mongo App',message:'Hi there'});
+	// res.render('index');
+	// res.send('Hello Express app-enhanced!')
+});
+
+app.post('/', (req, res) => {
+	console.log('.../index post reached');
+	console.log(req.body);
+	console.log('The fish equals ' + req.body.fish);
+	// res.send('Post index reached');
+	res.redirect('./');
 });
 
 app.get('/rooms/readone', async (req, res)=>{
