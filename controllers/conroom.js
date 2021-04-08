@@ -16,16 +16,16 @@ async function addRoom(req, res) {
 };
 
 async function addRoomNoRes(req, res) {
-	console.log("addRoom:start");
+	console.log("addRoomNoRes:start");
 	let newRoom = new Rooms(req.body);
 	newRoom.save((err, room)=>{
 		if (err) {
-			console.log("addRoom:err");
+			console.log("addRoomNoRes:err="+err);
 			// res.send(err);
 			return false;
 		}
 		else {
-			console.log("addRoom:noerr");
+			console.log("addRoomNoRes:noerr");
 			// res.json(room);
 			return true;
 		}
