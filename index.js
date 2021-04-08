@@ -32,6 +32,7 @@ await mongodbops.add(uri, "7 Main St", "dining room").catch(console.dir);
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static("css"));
 
 app.get('/', (req, res, next)=>{
 	console.log('... first handler');
@@ -55,11 +56,14 @@ app.get('/', (req, res) => {
 	// res.send('Hello Express app-enhanced!')
 });
 
-app.post('/', (req, res) => {
+app.post('/', async (req, res) => {
 	console.log('.../index post reached');
 	console.log(req.body);
 	console.log('The fish equals ' + req.body.fish);
 	// res.send('Post index reached');
+	delete req.body.fish;
+	let addRet = await conroom.addRoomNoRes(req, res);
+	console.log('addRet='+addRet);
 	res.redirect('./');
 });
 

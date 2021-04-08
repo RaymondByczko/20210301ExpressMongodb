@@ -1,0 +1,18 @@
+.room-container {
+	display: grid;
+	grid-template-columns: auto auto auto;
+}
+
+.flex-container {
+	display: flex;
+	flex-direction: column;
+	background-color: dodgerblue;
+}
+
+.home-label {
+	display:inline-flex;
+	width:16em;
+	border: solid 3px goldenrod;
+	border-radius: 4px;
+	padding: 5px;
+}

@@ -4,57 +4,67 @@ html
 			name="viewport" content="width=device-width, initial-scale=1.0"
 		)
 		title= title
-		link(href='css/views.css'
+		link(href='style.css' rel='stylesheet'
 		type='text/css')
-	body(class=room-container)
-		h1= message
-		form(action='/' method='post')
-			label(
-				for='fish'
-			) Enter fish
-			input(
-				type='text'
-				name='fish'
-			)
-			br()
-			br()
-			input(
-				type='submit'
-				Value='Submit fish'
-			)
-			br()
-			br()
-			label(
-				for='houseAddress'
-			) Enter Home Address
-			input(
-				type='text'
-				name='houseAddress'
-			)
-			br()
-			br()
-			label(
-				for="roomName"
-			) Enter Room Name
-			input(
-				type='text'
-				name='roomName'
-			)
-			br()
-			br()
-			label(
-				for="location"
-			) Enter Location
-			input(
-				type='text'
-				name='location'
-			)
-			br()
-			br()
-			label(
-				for="sqfootage"
-			) Enter Sq. Footage
-			input(
-				type='text'
-				name='sqfootage'
-			)
+	body(class='flex-container')
+		DIV
+			H1(class='h1_class') #{message}
+		DIV
+			form(action='/' method='post')
+				label(
+					for='fish'
+					class='home-label'
+				) 	Enter fish
+				input(
+					type='text'
+					name='fish'
+				)
+				br()
+				br()
+				input(
+					type='submit'
+					Value='Submit fish'
+				)
+				br()
+				br()
+				DIV(class='flex-container')
+					DIV
+						label(
+							for='houseAddress'
+							class='home-label'
+						) Enter Home Address
+					DIV
+						input(
+							type='text'
+							name='houseAddress'
+						)
+				br()
+				br()
+				label(
+					for="roomName"
+					class='home-label'
+				) Enter Room Name
+				input(
+					type='text'
+					name='roomName'
+				)
+				br()
+				br()
+				label(
+					for="location"
+					class='home-label'
+				) Enter Location
+				input(
+					type='text'
+					name='location'
+				)
+				br()
+				br()
+				label(
+					for="sqfootage"
+					class='home-label'
+				) Enter Sq. Footage
+				input(
+					type='text'
+					name='sqfootage'
+				)
