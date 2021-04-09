@@ -26,9 +26,13 @@ let j=process.env.J;
 let uri = "mongodb+srv://"+i+":" + j+"@cluster0.c2u9s.mongodb.net/houseDB?retryWrites=true&w=majority";
 
 
-await mongodbops.ping(uri).catch(console.dir);
+///await mongodbops.ping(uri).catch(console.dir);
 
-await mongodbops.add(uri, "7 Main St", "dining room").catch(console.dir);
+await mongodbops.add(uri, "7 Main St", "dining room").catch((err)=>{
+	console.log("add:dining err:start");
+	console.dir(err);
+	console.log("add:dining err:end");
+});
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));

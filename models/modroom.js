@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+function produceRooms() {
 let i=process.env.I;
 let j=process.env.J;
 
@@ -32,5 +33,7 @@ const RoomSchema = new Schema({
 
 let colName = "roomsCOL";
 const Rooms = mongoose.model('RoomsCol', RoomSchema, colName);
+return Rooms;
+}
 
-exports.Rooms = Rooms;
+exports.produceRooms = produceRooms;

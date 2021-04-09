@@ -1,7 +1,8 @@
-const Rooms  = require('../models/modroom').Rooms;
+const produceRooms  = require('../models/modroom').produceRooms;
 
 async function addRoom(req, res) {
 	console.log("addRoom:start");
+	let Rooms = produceRooms();
 	let newRoom = new Rooms(req.body);
 	newRoom.save((err, room)=>{
 		if (err) {
@@ -17,6 +18,7 @@ async function addRoom(req, res) {
 
 async function addRoomNoRes(req, res) {
 	console.log("addRoomNoRes:start");
+	let Rooms = produceRooms();
 	let newRoom = new Rooms(req.body);
 	newRoom.save((err, room)=>{
 		if (err) {
