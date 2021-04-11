@@ -25,12 +25,24 @@ let j=process.env.J;
 // Connection URI
 let uri = "mongodb+srv://"+i+":" + j+"@cluster0.c2u9s.mongodb.net/houseDB?retryWrites=true&w=majority";
 
-
-///await mongodbops.ping(uri).catch(console.dir);
+let mongodbContact = "beforeping";
+console.log("mongodbContact="+mongodbContact);
+await mongodbops.ping(uri).catch((err)=>{
+	mongodbContact = "pingfailed";
+	// console.dir(err);
+}).finally(()=>{
+	console.log("in finally");
+	console.log("... mongodbContact="+ mongodbContact);
+	mongodbContact="pingsuccess";
+	if (mongodbContact.localeCompare("beforeping") === 0) {
+		mongodbConact = "pingsuccess";
+	}
+});
+console.log("mongodbContact="+mongodbContact);
 
 await mongodbops.add(uri, "7 Main St", "dining room").catch((err)=>{
 	console.log("add:dining err:start");
-	console.dir(err);
+	// console.dir(err);
 	console.log("add:dining err:end");
 });
 
