@@ -17,14 +17,31 @@
 	padding: 5px;
 }
 
+.dbstatus-parent {
+	margin: 2px;
+}
+
 .dbstatus-success {
 	border: solid 3px greenyellow;
 	border-radius: 6px;
 	padding: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin: 5px;
+	display: inline-block;
 }
 
 .dbstatus-failed {
 	border: solid 3px red;
 	border-radius: 6px;
 	padding: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+	margin: 5px;
+	display: inline-block;
+}
+
+.dbcheck {
+	background-color: blueviolet;
+	color: gray;
 }

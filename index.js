@@ -82,6 +82,10 @@ app.get('/', (req, res) => {
 	// res.send('Hello Express app-enhanced!')
 });
 
+app.get('/dbstatus', (req, res)=>{
+	res.json({'dbstatus':'ok'})
+});
+
 app.post('/', async (req, res) => {
 	console.log('.../index post reached');
 	console.log(req.body);
