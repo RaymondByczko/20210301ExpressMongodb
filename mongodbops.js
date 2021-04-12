@@ -14,6 +14,31 @@ async function ping(uri) {
     await client.close();
   }
 }
+//STHERE
+async function pingWithCredentials(U,P)
+{
+let uri = "mongodb+srv://"+U+":" + P+"@cluster0.c2u9s.mongodb.net/houseDB?retryWrites=true&w=majority";
+
+let mongodbContact = "beforeping";
+console.log("mongodbContact(INI)="+mongodbContact);
+await ping(uri).catch((err)=>{
+	console.log('mongodbContact(CATCH):'+mongodbContact);
+	mongodbContact = "pingfailed";
+	// console.dir(err);
+}).finally(()=>{
+	console.log("mongodbContact(FINALLY)="+ mongodbContact);
+	if (mongodbContact == "pingfailed"){
+		console.log("pingfailed detected");
+	}
+	else {
+		console.log("pingfailed not detected");
+		mongodbContact="pingsuccess";
+	}
+});
+console.log("mongodbContact(LAST)="+mongodbContact);
+return mongodbContact;
+}
+//ENHERE
 
 async function add(uri, houseaddress, roomname) {
 	let client = null;
@@ -153,6 +178,7 @@ async function getadjacent(prevornext, sortcode, uri, db, coll, theId) {
 
 
 exports.ping = ping;
+exports.pingWithCredentials = pingWithCredentials;
 exports.add = add;
 exports.getone = getone;
 exports.getadjacent= getadjacent;

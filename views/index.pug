@@ -12,11 +12,11 @@ html
 		DIV(class='dbstatus-parent')
 			DIV(class='dbstatus-success') Database Status
 			if dbStatus == 'pingfailed'
-				DIV(class='dbstatus-failed') #{dbStatus}
+				DIV(class='dbstatus-failed', id='dbstatus_id') #{dbStatus}
 			else
-				DIV(class='dbstatus-success') #{dbStatus}
+				DIV(class='dbstatus-success' id='dbstatus_id') #{dbStatus}
 		DIV
-			BUTTON(class='dbcheck', type='button', onclick="fetch('/dbstatus').then(response => response.json()).then(data => alert(JSON.stringify(data)));") Check
+			BUTTON(class='dbcheck', type='button', onclick="fetch('/dbstatus').then(response => response.json()).then(data => {alert(JSON.stringify(data));document.querySelector('#dbstatus_id').innerHTML = data.pingstatus;})") Check
 		DIV
 			H1(class='h1_class') #{message}
 		DIV

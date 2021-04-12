@@ -22,7 +22,11 @@ app.set('views', './views');
 let i=process.env.I;
 let j=process.env.J;
 
+let pingStatus = await mongodbops.pingWithCredentials(i,j);
+let mongodbContact = pingStatus;
+
 // Connection URI
+/**** below is refactored into pingWithCredentials
 let uri = "mongodb+srv://"+i+":" + j+"@cluster0.c2u9s.mongodb.net/houseDB?retryWrites=true&w=majority";
 
 let mongodbContact = "beforeping";
@@ -45,6 +49,8 @@ await mongodbops.ping(uri).catch((err)=>{
 	// }
 });
 console.log("mongodbContact(LAST)="+mongodbContact);
+****/
+let uri = "mongodb+srv://"+i+":" + j+"@cluster0.c2u9s.mongodb.net/houseDB?retryWrites=true&w=majority";
 
 await mongodbops.add(uri, "7 Main St", "dining room").catch((err)=>{
 	console.log("add:dining err:start");
@@ -82,8 +88,10 @@ app.get('/', (req, res) => {
 	// res.send('Hello Express app-enhanced!')
 });
 
-app.get('/dbstatus', (req, res)=>{
-	res.json({'dbstatus':'ok'})
+app.get('/dbstatus', async (req, res)=>{
+	let pingStatus = await mongodbops.pingWithCredentials(i,j);
+	// let mongodbContact = pingStatus;
+	res.json({'pingstatus':pingStatus})
 });
 
 app.post('/', async (req, res) => {
