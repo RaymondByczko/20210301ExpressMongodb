@@ -8,6 +8,13 @@ html
 		type='text/css')
 	body(class='flex-container')
 		DIV
+			SPAN(class='dbstatus-success') Database Status
+			// SPAN(class='dbstatus', id='dbstatus_id') #{dbStatus}
+			if dbStatus == 'pingfailed'
+				SPAN(class='dbstatus-failed') #{dbStatus}
+			else
+				SPAN(class='dbstatus-success') #{dbStatus}
+		DIV
 			H1(class='h1_class') #{message}
 		DIV
 			form(action='/' method='post')

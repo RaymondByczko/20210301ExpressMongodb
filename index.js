@@ -26,19 +26,25 @@ let j=process.env.J;
 let uri = "mongodb+srv://"+i+":" + j+"@cluster0.c2u9s.mongodb.net/houseDB?retryWrites=true&w=majority";
 
 let mongodbContact = "beforeping";
-console.log("mongodbContact="+mongodbContact);
+console.log("mongodbContact(INI)="+mongodbContact);
 await mongodbops.ping(uri).catch((err)=>{
+	console.log('mongodbContact(CATCH):'+mongodbContact);
 	mongodbContact = "pingfailed";
 	// console.dir(err);
 }).finally(()=>{
-	console.log("in finally");
-	console.log("... mongodbContact="+ mongodbContact);
-	mongodbContact="pingsuccess";
-	if (mongodbContact.localeCompare("beforeping") === 0) {
-		mongodbConact = "pingsuccess";
+	console.log("mongodbContact(FINALLY)="+ mongodbContact);
+	if (mongodbContact == "pingfailed"){
+		console.log("pingfailed detected");
 	}
+	else {
+		console.log("pingfailed not detected");
+		mongodbContact="pingsuccess";
+	}
+	// if (mongodbContact.localeCompare("beforeping") === 0) {
+	// 	mongodbContact = "pingsuccess";
+	// }
 });
-console.log("mongodbContact="+mongodbContact);
+console.log("mongodbContact(LAST)="+mongodbContact);
 
 await mongodbops.add(uri, "7 Main St", "dining room").catch((err)=>{
 	console.log("add:dining err:start");
@@ -49,6 +55,10 @@ await mongodbops.add(uri, "7 Main St", "dining room").catch((err)=>{
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("css"));
+app.use ((err, req, res, next)=>{
+	console.log('err='+err.stack);
+	res.status(500).send('Something broken');
+})
 
 app.get('/', (req, res, next)=>{
 	console.log('... first handler');
@@ -67,7 +77,7 @@ app.get('/', (req, res, next)=>{
 
 app.get('/', (req, res) => {
 	console.log('... app.get');
-  res.render('index', {title:'Express Mongo App',message:'Hi there'});
+  res.render('index', {dbStatus: mongodbContact, title:'Express Mongo App',message:'Hi there'});
 	// res.render('index');
 	// res.send('Hello Express app-enhanced!')
 });

@@ -16,3 +16,15 @@
 	border-radius: 4px;
 	padding: 5px;
 }
+
+.dbstatus-success {
+	border: solid 3px greenyellow;
+	border-radius: 6px;
+	padding: 5px;
+}
+
+.dbstatus-failed {
+	border: solid 3px red;
+	border-radius: 6px;
+	padding: 5px;
+}
