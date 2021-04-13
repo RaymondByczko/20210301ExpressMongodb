@@ -14,6 +14,8 @@ var bodyParser = require('body-parser');
 
 var session = require('express-session');
 const uuid = require('uuid');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
 canvas.registerFont('Playfair.ttf', { family: 'Playfont' });
 // const { registerFont } = require('canvas');
@@ -47,6 +49,10 @@ app.use ((err, req, res, next)=>{
 	res.status(500).send('Something broken');
 });
 app.use(session({
+	secret: process.env.S1
+}));
+/******
+app.use(session({
 	secret: [s1],
 	cookie: {
 		maxAge: 300000
@@ -58,8 +64,38 @@ app.use(session({
 		return uuid.v4();
 	}
 }));
+******/
 
 app.set('trust proxy',1);
+/**
+ * PASSPORT
+ */
+passport.serializeUser(function(user, done) {
+	console.log('... trying serializeUser');
+	console.log('... ... user='+user);
+	console.log('... ... user.id='+user.id);
+  // done(null, user.id);
+	done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+		// TODO check this
+		let err=null;
+    done(err, user);
+  }
+);
+
+passport.use(new LocalStrategy(function(username, password, done){
+	if (username != 'blue') {
+		return done(null, false, { message: 'Incorrect username.' });
+	}
+	if (password != 'fisherman') {
+		return done(null, false, { message: 'Incorrect password.' });
+	}
+	return done(null, username);
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get('/', (req, res, next)=>{
 	console.log('... first handler');
@@ -78,14 +114,24 @@ app.get('/', (req, res, next)=>{
 
 app.get('/', (req, res) => {
 	console.log('... app.get');
-	if (req.session.user) {
-	} else {
-		req.session.user = 'donut';
-	}
+	//if (req.session.user) //{
+	//} else {
+		// req.session.user = 'donut';
+	//}
   res.render('index', {dbStatus: mongodbContact, title:'Express Mongo App',message:'Hi there'});
 });
 
 app.get('/login', conlogin.get_login(mongodbContact));
+
+app.post('/login', /*(req, res, next)=>{*/
+	//console.log('... app.post prelogin ');
+	passport.authenticate('local', {
+		successRedirect:'./',
+		failureRedirect:'./loginfailed',
+		failureFlash:false
+	}));
+	// next();
+// })
 
 app.post('/login', (req, res)=>{
 	console.log('... app.post login');
@@ -94,6 +140,18 @@ app.post('/login', (req, res)=>{
 	res.location('/postlogin');
 	res.status(303).send('... app.post login completed');
 });
+
+/*
+app.post('/login', (req, res, next)=>{
+	console.log('... app.post postlogin ');
+	passport.authenticate('local', {
+		successRedirect:'./',
+		failureRedirect:'./login',
+		failureFlash:true
+	});
+	next();
+})
+*/
 
 app.get('/postlogin', (req, res)=>{
 	res.send('We are in postlogin');
