@@ -3,6 +3,7 @@ const { MongoClient } = require("mongodb");
 const json2html = require("node-json2html");
 const mongodbqo  = require("./mongodbqo"); //.working;
 const mongodbops = require("./mongodbops");
+const conlogin = require("./controllers/conlogin");
 const texttoimage = require("text-to-image");
 const cors = require('cors');
 const conroom = require("./controllers/conroom");
@@ -108,6 +109,8 @@ app.get('/', (req, res) => {
   res.render('index', {dbStatus: mongodbContact, title:'Express Mongo App',message:'Hi there'});
 });
 
+app.get('/login', conlogin.get_login(mongodbContact));
+/*****
 app.get('/login', (req,res)=> {
 	console.log('... app.get');
 	if (req.session.user) {
@@ -116,6 +119,7 @@ app.get('/login', (req,res)=> {
 	}
   res.render('login', {dbStatus: mongodbContact, title:'Express Mongo App',message:'Login here'});
 });
+*****/
 
 app.post('/login', (req, res)=>{
 	console.log('... app.post login');
