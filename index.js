@@ -117,6 +117,18 @@ app.get('/login', (req,res)=> {
   res.render('login', {dbStatus: mongodbContact, title:'Express Mongo App',message:'Login here'});
 });
 
+app.post('/login', (req, res)=>{
+	console.log('... app.post login');
+	console.log('... ... req.body.username='+req.body.username);
+	console.log('... ... req.body.password='+ req.body.password);
+	res.location('/postlogin');
+	res.status(303).send('... app.post login completed');
+});
+
+app.get('/postlogin', (req, res)=>{
+	res.send('We are in postlogin');
+})
+
 app.get('/dbstatus', async (req, res)=>{
 	let pingStatus = await mongodbops.pingWithCredentials(i,j);
 	// let mongodbContact = pingStatus;
