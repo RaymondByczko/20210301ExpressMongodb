@@ -30,31 +30,7 @@ let s1=process.env.S1;
 let pingStatus = await mongodbops.pingWithCredentials(i,j);
 let mongodbContact = pingStatus;
 
-// Connection URI
-/**** below is refactored into pingWithCredentials
-let uri = "mongodb+srv://"+i+":" + j+"@cluster0.c2u9s.mongodb.net/houseDB?retryWrites=true&w=majority";
 
-let mongodbContact = "beforeping";
-console.log("mongodbContact(INI)="+mongodbContact);
-await mongodbops.ping(uri).catch((err)=>{
-	console.log('mongodbContact(CATCH):'+mongodbContact);
-	mongodbContact = "pingfailed";
-	// console.dir(err);
-}).finally(()=>{
-	console.log("mongodbContact(FINALLY)="+ mongodbContact);
-	if (mongodbContact == "pingfailed"){
-		console.log("pingfailed detected");
-	}
-	else {
-		console.log("pingfailed not detected");
-		mongodbContact="pingsuccess";
-	}
-	// if (mongodbContact.localeCompare("beforeping") === 0) {
-	// 	mongodbContact = "pingsuccess";
-	// }
-});
-console.log("mongodbContact(LAST)="+mongodbContact);
-****/
 let uri = "mongodb+srv://"+i+":" + j+"@cluster0.c2u9s.mongodb.net/houseDB?retryWrites=true&w=majority";
 
 await mongodbops.add(uri, "7 Main St", "dining room").catch((err)=>{
@@ -110,16 +86,6 @@ app.get('/', (req, res) => {
 });
 
 app.get('/login', conlogin.get_login(mongodbContact));
-/*****
-app.get('/login', (req,res)=> {
-	console.log('... app.get');
-	if (req.session.user) {
-	} else {
-		req.session.user = 'donut';
-	}
-  res.render('login', {dbStatus: mongodbContact, title:'Express Mongo App',message:'Login here'});
-});
-*****/
 
 app.post('/login', (req, res)=>{
 	console.log('... app.post login');
