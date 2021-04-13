@@ -106,9 +106,15 @@ app.get('/', (req, res) => {
 		req.session.user = 'donut';
 	}
   res.render('index', {dbStatus: mongodbContact, title:'Express Mongo App',message:'Hi there'});
-	// res.render('index');
-	// res.send('Hello Express app-enhanced!')
-	// req.session.user = 'donut';
+});
+
+app.get('/login', (req,res)=> {
+	console.log('... app.get');
+	if (req.session.user) {
+	} else {
+		req.session.user = 'donut';
+	}
+  res.render('login', {dbStatus: mongodbContact, title:'Express Mongo App',message:'Login here'});
 });
 
 app.get('/dbstatus', async (req, res)=>{

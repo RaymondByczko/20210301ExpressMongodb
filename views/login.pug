@@ -1,0 +1,49 @@
+html
+	head
+		meta(
+			name="viewport" content="width=device-width, initial-scale=1.0"
+		)
+		title= title
+		link(href='style.css' rel='stylesheet'
+		type='text/css')
+		script
+			include ../mongodbops.js
+	body(class='flex-container')
+		DIV(class='dbstatus-parent')
+			DIV(class='dbstatus-success') Database Status
+			if dbStatus == 'pingfailed'
+				DIV(class='dbstatus-failed', id='dbstatus_id') #{dbStatus}
+			else
+				DIV(class='dbstatus-success' id='dbstatus_id') #{dbStatus}
+		DIV
+			BUTTON(class='dbcheck', type='button', onclick="fetch('/dbstatus').then(response => response.json()).then(data => {alert(JSON.stringify(data));document.querySelector('#dbstatus_id').innerHTML = data.pingstatus;})") Check
+		DIV
+			H1(class='h1_class') #{message}
+		DIV
+			form(action='/' method='post')
+				label(
+					for='username'
+					class='home-label'
+				) 	Enter Username
+				input(
+					type='text'
+					name='username'
+				)
+				br()
+				br()
+				label(
+					for='passwd'
+					class='home-label'
+				) 	Enter Password
+				input(
+					type='text'
+					name='password'
+				)
+				br()
+				br()
+				input(
+					type='submit'
+					Value='Login'
+				)
+				br()
+				br()
