@@ -11,6 +11,9 @@ const pug = require('pug');
 const canvas = require('canvas');
 var bodyParser = require('body-parser');
 
+var session = require('express-session');
+const uuid = require('uuid');
+
 canvas.registerFont('Playfair.ttf', { family: 'Playfont' });
 // const { registerFont } = require('canvas');
 
@@ -21,6 +24,7 @@ app.set('views', './views');
 
 let i=process.env.I;
 let j=process.env.J;
+let s1=process.env.S1;
 
 let pingStatus = await mongodbops.pingWithCredentials(i,j);
 let mongodbContact = pingStatus;
@@ -64,7 +68,21 @@ app.use(express.static("css"));
 app.use ((err, req, res, next)=>{
 	console.log('err='+err.stack);
 	res.status(500).send('Something broken');
-})
+});
+app.use(session({
+	secret: [s1],
+	cookie: {
+		maxAge: 300000
+	},
+	saveUninitialized: false,
+	resave: true,
+	secure: true,
+	genid: (req)=>{
+		return uuid.v4();
+	}
+}));
+
+app.set('trust proxy',1);
 
 app.get('/', (req, res, next)=>{
 	console.log('... first handler');
@@ -83,14 +101,20 @@ app.get('/', (req, res, next)=>{
 
 app.get('/', (req, res) => {
 	console.log('... app.get');
+	if (req.session.user) {
+	} else {
+		req.session.user = 'donut';
+	}
   res.render('index', {dbStatus: mongodbContact, title:'Express Mongo App',message:'Hi there'});
 	// res.render('index');
 	// res.send('Hello Express app-enhanced!')
+	// req.session.user = 'donut';
 });
 
 app.get('/dbstatus', async (req, res)=>{
 	let pingStatus = await mongodbops.pingWithCredentials(i,j);
 	// let mongodbContact = pingStatus;
+	console.log('user='+req.session.user);
 	res.json({'pingstatus':pingStatus})
 });
 
