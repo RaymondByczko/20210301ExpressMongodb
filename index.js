@@ -49,7 +49,9 @@ app.use ((err, req, res, next)=>{
 	res.status(500).send('Something broken');
 });
 app.use(session({
-	secret: process.env.S1
+	secret: process.env.S1,
+	saveUninitialized: false,
+  resave: false
 }));
 /******
 app.use(session({
@@ -141,6 +143,12 @@ app.post('/login', (req, res)=>{
 	res.status(303).send('... app.post login completed');
 });
 
+app.get('/logout', (req, res)=>{
+	req.logOut();
+	req.session.destroy();
+	res.redirect('./');
+});
+
 /*
 app.post('/login', (req, res, next)=>{
 	console.log('... app.post postlogin ');
@@ -152,6 +160,42 @@ app.post('/login', (req, res, next)=>{
 	next();
 })
 */
+app.get('/loginfailed', (req, res)=>{
+	res.send('Login failed..sorry');
+});
+
+app.get('/pagenoauth', (req,res)=>{
+	if (req.isAuthenticated() ){
+		console.log('.. is Authenticated');
+	}
+	else
+	{
+		console.log('.. is not authorized');
+	}
+	res.send('Page no auth');
+});
+
+app.get('/pagewithauth', (req,res)=>{
+	//passport.authorize('local', {failureRedirect:'./accessprohibited'});
+
+/**
+	passport.authenticate('local', {
+		successRedirect:'./pagewithauth',
+		failureRedirect:'./accessprohibited',
+		failureFlash:false
+	});
+	**/
+	if (req.isAuthenticated()){
+		res.send('Page with auth');
+	}
+	else {
+		res.redirect('./accessprohibited');
+	}
+});
+
+app.get('/accessprohibited', (req,res)=>{
+	res.send('Access denied');
+});
 
 app.get('/postlogin', (req, res)=>{
 	res.send('We are in postlogin');
