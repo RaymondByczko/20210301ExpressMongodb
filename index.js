@@ -164,18 +164,18 @@ app.get('/loginfailed', (req, res)=>{
 	res.send('Login failed..sorry');
 });
 
-app.get('/pagenoauth', (req,res)=>{
+app.get('/pagewithnoa', (req,res)=>{
 	if (req.isAuthenticated() ){
-		console.log('.. is Authenticated');
+		console.log('.. pagewithnoa is Authenticated');
 	}
 	else
 	{
-		console.log('.. is not authorized');
+		console.log('.. pagewithnoa is not Authenticated');
 	}
 	res.send('Page no auth');
 });
 
-app.get('/pagewithauth', (req,res)=>{
+app.get('/pagewitha', (req,res)=>{
 	//passport.authorize('local', {failureRedirect:'./accessprohibited'});
 
 /**
@@ -186,9 +186,11 @@ app.get('/pagewithauth', (req,res)=>{
 	});
 	**/
 	if (req.isAuthenticated()){
-		res.send('Page with auth');
+		console.log("... pagewitha is Authenticated");
+		res.send('Pagewitha here');
 	}
 	else {
+		console.log("...pagewitha is not Authenticated");
 		res.redirect('./accessprohibited');
 	}
 });
