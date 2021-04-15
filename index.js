@@ -176,7 +176,9 @@ app.get('/pagewithnoa', (req,res)=>{
 });
 
 // Some half generic middleware for authentication.
-app.get('/pagewitha', (req, res,next)=>{
+// In this enhanced example, give an array for set of routes.
+
+app.get(['/pagewitha1', '/pagewitha2'], (req, res,next)=>{
 	if (req.isAuthenticated()){
 		console.log("... pagewitha is Authenticated");
 		next();
@@ -186,7 +188,7 @@ app.get('/pagewitha', (req, res,next)=>{
 		res.redirect('./accessprohibited');
 	}
 });
-app.get('/pagewitha', (req,res)=>{
+app.get('/pagewitha1', (req,res)=>{
 	//passport.authorize('local', {failureRedirect:'./accessprohibited'});
 
 /**
@@ -207,7 +209,11 @@ app.get('/pagewitha', (req,res)=>{
 	}
 	****/
 	// Lets rely on middleware for just authentication.
-	res.send('new Pagewitha here');
+	res.send('new Pagewitha1 here');
+});
+
+app.get('/pagewitha2', (req,res)=>{
+	res.send('new Pagewitha2 here');
 });
 
 app.get('/accessprohibited', (req,res)=>{
