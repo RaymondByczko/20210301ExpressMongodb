@@ -175,6 +175,17 @@ app.get('/pagewithnoa', (req,res)=>{
 	res.send('Page no auth');
 });
 
+// Some half generic middleware for authentication.
+app.get('/pagewitha', (req, res,next)=>{
+	if (req.isAuthenticated()){
+		console.log("... pagewitha is Authenticated");
+		next();
+	}
+	else {
+		console.log("...pagewitha is not Authenticated");
+		res.redirect('./accessprohibited');
+	}
+});
 app.get('/pagewitha', (req,res)=>{
 	//passport.authorize('local', {failureRedirect:'./accessprohibited'});
 
@@ -185,6 +196,7 @@ app.get('/pagewitha', (req,res)=>{
 		failureFlash:false
 	});
 	**/
+	/*****
 	if (req.isAuthenticated()){
 		console.log("... pagewitha is Authenticated");
 		res.send('Pagewitha here');
@@ -193,6 +205,9 @@ app.get('/pagewitha', (req,res)=>{
 		console.log("...pagewitha is not Authenticated");
 		res.redirect('./accessprohibited');
 	}
+	****/
+	// Lets rely on middleware for just authentication.
+	res.send('new Pagewitha here');
 });
 
 app.get('/accessprohibited', (req,res)=>{
