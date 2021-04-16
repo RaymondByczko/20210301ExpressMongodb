@@ -16,6 +16,7 @@ var session = require('express-session');
 const uuid = require('uuid');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var flash = require('connect-flash');
 
 canvas.registerFont('Playfair.ttf', { family: 'Playfont' });
 // const { registerFont } = require('canvas');
@@ -77,11 +78,17 @@ passport.serializeUser(function(user, done) {
 	console.log('... ... user='+user);
 	console.log('... ... user.id='+user.id);
   // done(null, user.id);
-	done(null, user);
+
+	let done_info = user;
+	// Substitute an id name for a username.
+	done_info = "11234";
+	done(null, done_info);
 });
 
 passport.deserializeUser(function(user, done) {
 		// TODO check this
+		console.log('... tryng deserializeUser');
+		console.log ('... ...  user =' + user);
 		let err=null;
     done(err, user);
   }
@@ -98,6 +105,8 @@ passport.use(new LocalStrategy(function(username, password, done){
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(flash());
 
 app.get('/', (req, res, next)=>{
 	console.log('... first handler');
@@ -130,7 +139,7 @@ app.post('/login', /*(req, res, next)=>{*/
 	passport.authenticate('local', {
 		successRedirect:'./',
 		failureRedirect:'./loginfailed',
-		failureFlash:false
+		failureFlash:true
 	}));
 	// next();
 // })
@@ -144,6 +153,7 @@ app.post('/login', (req, res)=>{
 });
 
 app.get('/logout', (req, res)=>{
+	console.log('... logout');
 	req.logOut();
 	req.session.destroy();
 	res.redirect('./');
@@ -180,11 +190,11 @@ app.get('/pagewithnoa', (req,res)=>{
 
 app.get(['/pagewitha1', '/pagewitha2'], (req, res,next)=>{
 	if (req.isAuthenticated()){
-		console.log("... pagewitha is Authenticated");
+		console.log("... " + req.path + " is Authenticated");
 		next();
 	}
 	else {
-		console.log("...pagewitha is not Authenticated");
+		console.log("..." + req.path + " is not Authenticated");
 		res.redirect('./accessprohibited');
 	}
 });
@@ -214,6 +224,11 @@ app.get('/pagewitha1', (req,res)=>{
 
 app.get('/pagewitha2', (req,res)=>{
 	res.send('new Pagewitha2 here');
+});
+
+app.get('/pagewitha3', (req,res)=>{
+	// passport.authenticate('session', {failureRedirect:'./accessprohibited'});
+	res.send('new Pagewitha3 here');
 });
 
 app.get('/accessprohibited', (req,res)=>{
@@ -356,6 +371,15 @@ app.post('/rooms', async (req, res)=>{
 		await conroom.addRoom(req, res);
 	}
 );
+
+app.get('/users', (req, res) => {
+	console.log('... app.get /users');
+  res.render('useradd', {dbStatus: mongodbContact, title:'Express Mongo App',message:'Hi there'});
+});
+
+app.post('/users', async (req, res)=>{
+		await conuser.addUser(req, res);
+});
 
 app.listen(3000, () => {
   console.log('server started');

@@ -1,6 +1,6 @@
 function get_login(mongodbContact){
 return (req, res)=>{
-	console.log('... app.get');
+	console.log('... conlogin.get_login');
 	/**
 	if (req.session.user) {
 	} else {
