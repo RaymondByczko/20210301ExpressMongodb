@@ -7,6 +7,7 @@ const conlogin = require("./controllers/conlogin");
 const texttoimage = require("text-to-image");
 const cors = require('cors');
 const conroom = require("./controllers/conroom");
+const conuser = require("./controllers/conuser");
 const pug = require('pug');
 
 const canvas = require('canvas');
@@ -374,10 +375,11 @@ app.post('/rooms', async (req, res)=>{
 
 app.get('/users', (req, res) => {
 	console.log('... app.get /users');
-  res.render('useradd', {dbStatus: mongodbContact, title:'Express Mongo App',message:'Hi there'});
+  res.render('useradd', {dbStatus: mongodbContact, title:'Express Mongo App',message:'Add User Here'});
 });
 
 app.post('/users', async (req, res)=>{
+		console.log('... app.post /users');
 		await conuser.addUser(req, res);
 });
 

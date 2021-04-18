@@ -20,14 +20,14 @@ html
 		DIV
 			H1(class='h1_class') #{message}
 		DIV
-			form(action='/useradd' method='post')
+			form(action='/users' method='post')
 				label(
 					for='username'
 					class='home-label'
 				) 	Enter Username
 				input(
 					type='text'
-					name='username'
+					name='name'
 				)
 				br()
 				br()
@@ -36,11 +36,25 @@ html
 					class='home-label'
 				) 	Enter Password
 				input(
-					type='password'
+					type='text'
 					name='password'
 				)
 				br()
 				br()
+				label(
+					for='role'
+					class='home-label'
+				) Enter role
+				select(
+					name='role'
+					id='id_role'
+				)
+					option(
+						value='regular'
+					) regular
+					option(
+						value='admin'
+					) admin
 				label(
 					for='id_active'
 					class='home-label'
@@ -49,6 +63,14 @@ html
 					name='active'
 					id='id_active'
 				)
+					option(
+						value="true"
+					) active
+					option(
+						value="false"
+					) notactive
+				br()
+				br()
 				input(
 					type='submit'
 					Value='Submit'
