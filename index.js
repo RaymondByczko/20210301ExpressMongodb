@@ -44,6 +44,19 @@ await mongodbops.add(uri, "7 Main St", "dining room").catch((err)=>{
 	console.log("add:dining err:end");
 });
 
+function lookfor(prop1, after) {
+	return (req,res,next)=>{
+		console.log(after)
+		if (req[prop1]){
+			console.log("... " + prop1 + " exists");
+		}
+		else {
+			console.log("... " + prop1 + " does not exist");
+		}
+		next();
+	};
+}
+
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("css"));
@@ -90,6 +103,7 @@ passport.serializeUser(async function(user, done) {
 	done(null, done_info);
 });
 
+app.use(lookfor('isAuthenticated', 'PREDESERIAL'));
 passport.deserializeUser(function(user, done) {
 		// TODO check this
 		console.log('... tryng deserializeUser');
@@ -99,6 +113,7 @@ passport.deserializeUser(function(user, done) {
   }
 );
 
+/**
 function lookfor(prop1, after) {
 	return (req,res,next)=>{
 		console.log(after)
@@ -111,6 +126,8 @@ function lookfor(prop1, after) {
 		next();
 	};
 }
+**/
+app.use(lookfor('isAuthenticated', 'PRIOR NEW LOCAL'));
 
 passport.use(new LocalStrategy(async function(username, password, done){
 	console.log('passport.use::START');
