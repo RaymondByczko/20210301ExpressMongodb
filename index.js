@@ -99,6 +99,19 @@ passport.deserializeUser(function(user, done) {
   }
 );
 
+function lookfor(prop1, after) {
+	return (req,res,next)=>{
+		console.log(after)
+		if (req[prop1]){
+			console.log("... " + prop1 + " exists");
+		}
+		else {
+			console.log("... " + prop1 + " does not exist");
+		}
+		next();
+	};
+}
+
 passport.use(new LocalStrategy(async function(username, password, done){
 	console.log('passport.use::START');
 	console.log('... username='+username);
@@ -126,7 +139,25 @@ passport.use(new LocalStrategy(async function(username, password, done){
 	}
 	return done(null, username);
 }));
+
+app.use(lookfor("isAuthenticated", "NEW STRATEGY"));
 app.use(passport.initialize());
+
+/***
+function lookfor(prop1, after) {
+	return (req,res,next)=>{
+		console.log(after)
+		if (req[prop1]){
+			console.log("... " + prop1 + " exists");
+		}
+		else {
+			console.log("... " + prop1 + " does not exist");
+		}
+		next();
+	};
+}
+***/
+app.use(lookfor('isAuthenticated', 'PASSPORT.INITIALIZE'));
 app.use(passport.session());
 
 app.use(flash());
