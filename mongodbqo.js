@@ -66,7 +66,19 @@ let onewithid = function(theId) {
 	}
 };
 
+let onewithuser = function(name) {
+	return {
+		query: {
+			name: {$eq: name}
+		},
+		options: {
+
+		}
+	}
+}
+
 exports.working=working;
 exports.onegreater=onegreater;
 exports.onelesser=onelesser;
 exports.onewithid=onewithid;
+exports.onewithuser=onewithuser;

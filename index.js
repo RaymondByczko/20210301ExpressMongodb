@@ -16,6 +16,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 const uuid = require('uuid');
 var passport = require('passport');
+var bcryptjs = require('bcryptjs');
 var LocalStrategy = require('passport-local').Strategy;
 var flash = require('connect-flash');
 
@@ -74,15 +75,18 @@ app.set('trust proxy',1);
 /**
  * PASSPORT
  */
-passport.serializeUser(function(user, done) {
+passport.serializeUser(async function(user, done) {
 	console.log('... trying serializeUser');
 	console.log('... ... user='+user);
 	console.log('... ... user.id='+user.id);
   // done(null, user.id);
 
-	let done_info = user;
+	let userDocument =await mongodbops.getUser(uri, user);
+	console.log("... ... userDocument="+JSON.stringify(userDocument));
+	done_info = userDocument._id;
+	// let done_info = user;
 	// Substitute an id name for a username.
-	done_info = "11234";
+	// done_info = "11234";
 	done(null, done_info);
 });
 
@@ -95,12 +99,30 @@ passport.deserializeUser(function(user, done) {
   }
 );
 
-passport.use(new LocalStrategy(function(username, password, done){
+passport.use(new LocalStrategy(async function(username, password, done){
+	console.log('passport.use::START');
+	console.log('... username='+username);
+	console.log('... password='+password);
+
+	let userDocument = await mongodbops.getUser(uri, username);
+	console.log("passport:use:userDocument="+userDocument);
+	/*****
 	if (username != 'blue') {
 		return done(null, false, { message: 'Incorrect username.' });
 	}
 	if (password != 'fisherman') {
 		return done(null, false, { message: 'Incorrect password.' });
+	}
+	*****/
+	if (userDocument == null) {
+		// no account with that user
+		console.log("... username not found");
+		return done(null, false, { message: 'Incorrect username.'});
+	}
+	let compare = bcryptjs.compareSync(password, userDocument.password);
+	if (!compare) {
+		console.log("... password does not verify");
+		return done(null, false, {message: 'Incorrect password.'});
 	}
 	return done(null, username);
 }));
@@ -136,12 +158,13 @@ app.get('/', (req, res) => {
 app.get('/login', conlogin.get_login(mongodbContact));
 
 app.post('/login', /*(req, res, next)=>{*/
-	//console.log('... app.post prelogin ');
+	// console.log('... app.post preauthenticate');
 	passport.authenticate('local', {
 		successRedirect:'./',
 		failureRedirect:'./loginfailed',
 		failureFlash:true
 	}));
+	
 	// next();
 // })
 
@@ -220,6 +243,7 @@ app.get('/pagewitha1', (req,res)=>{
 	}
 	****/
 	// Lets rely on middleware for just authentication.
+	console.log("... req="+JSON.stringify(req));
 	res.send('new Pagewitha1 here');
 });
 

@@ -174,7 +174,40 @@ async function getadjacent(prevornext, sortcode, uri, db, coll, theId) {
 	console.log("getadjacent reached here");
 	return (docs.length == 2)?docs[1]._id:null;
 }
+/// Added getUser START
+async function getUser(uri,name) {
+	  let client = null;
+	let onerec = null;
+	try {
+		client = new MongoClient(uri, {useUnifiedTopology: true});
+		console.log('getUser:start');
+    await client.connect();
+		console.log('... after getUser: connect');
+		let query = {};
+		
+		if (name == null) {
+			console.log('getUser: name is null');
+		}
+		else {
+			console.log('getUser: name is not null');
+		}
+		
+		query = mongodbqo.onewithuser(name).query;
+		options = mongodbqo.onewithuser(name).options;
 
+    onerec = await client.db("houseDB").collection("usersCOL").findOne(query, options);
+    console.log("Successful getUser:onerec="+JSON.stringify(onerec));
+		if (onerec != null) {
+			console.log("getUser: onerec._id="+onerec._id);
+		}
+  } finally {
+    console.log("getUser: finally");
+		await client.close();
+  }
+	console.log("getUser reached here");
+	return onerec;
+}
+/// Added getUser END
 
 
 exports.ping = ping;
@@ -182,3 +215,4 @@ exports.pingWithCredentials = pingWithCredentials;
 exports.add = add;
 exports.getone = getone;
 exports.getadjacent= getadjacent;
+exports.getUser = getUser;
