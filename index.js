@@ -4,7 +4,7 @@ const { MongoClient } = require("mongodb");
 const json2html = require("node-json2html");
 const mongodbqo  = require("./mongodbqo"); //.working;
 const mongodbops = require("./mongodbops");
-const utils = require("./util");
+const util = require("./util");
 const conlogin = require("./controllers/conlogin");
 const texttoimage = require("text-to-image");
 const cors = require('cors');
@@ -42,13 +42,14 @@ let mongodbContact = pingStatus;
 /***
 let uri = "mongodb+srv://"+i+":" + j+"@cluster0.c2u9s.mongodb.net/houseDB?retryWrites=true&w=majority";
 ***/
-let uri = utils.uri();
+let uri = util.uri();
 await mongodbops.add(uri, "7 Main St", "dining room").catch((err)=>{
 	console.log("add:dining err:start");
 	// console.dir(err);
 	console.log("add:dining err:end");
 });
 
+/*****
 function lookfor(prop1, after) {
 	return (req,res,next)=>{
 		console.log(after)
@@ -61,6 +62,7 @@ function lookfor(prop1, after) {
 		next();
 	};
 }
+*****/
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -108,7 +110,7 @@ passport.serializeUser(async function(user, done) {
 	done(null, done_info);
 });
 
-app.use(lookfor('isAuthenticated', 'PREDESERIAL'));
+app.use(util.lookfor('isAuthenticated', 'PREDESERIAL'));
 passport.deserializeUser(function(user, done) {
 		// TODO check this
 		console.log('... tryng deserializeUser');
@@ -132,7 +134,7 @@ function lookfor(prop1, after) {
 	};
 }
 **/
-app.use(lookfor('isAuthenticated', 'PRIOR NEW LOCAL'));
+app.use(util.lookfor('isAuthenticated', 'PRIOR NEW LOCAL'));
 
 passport.use(new LocalStrategy(async function(username, password, done){
 	console.log('passport.use::START');
@@ -162,7 +164,7 @@ passport.use(new LocalStrategy(async function(username, password, done){
 	return done(null, username);
 }));
 
-app.use(lookfor("isAuthenticated", "NEW STRATEGY"));
+app.use(util.lookfor("isAuthenticated", "NEW STRATEGY"));
 app.use(passport.initialize());
 
 /***
@@ -179,7 +181,7 @@ function lookfor(prop1, after) {
 	};
 }
 ***/
-app.use(lookfor('isAuthenticated', 'PASSPORT.INITIALIZE'));
+app.use(util.lookfor('isAuthenticated', 'PASSPORT.INITIALIZE'));
 app.use(passport.session());
 
 app.use(flash());

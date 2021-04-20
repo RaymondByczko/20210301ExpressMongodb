@@ -8,4 +8,18 @@ function uri(){
 	return uri;
 }
 
+function lookfor(prop1, after) {
+	return (req,res,next)=>{
+		console.log(after)
+		if (req[prop1]){
+			console.log("... " + prop1 + " exists");
+		}
+		else {
+			console.log("... " + prop1 + " does not exist");
+		}
+		next();
+	};
+}
+
 exports.uri = uri;
+exports.lookfor = lookfor;
