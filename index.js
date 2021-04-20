@@ -1,8 +1,10 @@
 const express = require('express');
+const stringifysafe = require('json-stringify-safe');
 const { MongoClient } = require("mongodb");
 const json2html = require("node-json2html");
 const mongodbqo  = require("./mongodbqo"); //.working;
 const mongodbops = require("./mongodbops");
+const utils = require("./util");
 const conlogin = require("./controllers/conlogin");
 const texttoimage = require("text-to-image");
 const cors = require('cors');
@@ -28,16 +30,19 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('views', './views');
 
+
 let i=process.env.I;
 let j=process.env.J;
+
 let s1=process.env.S1;
 
 let pingStatus = await mongodbops.pingWithCredentials(i,j);
 let mongodbContact = pingStatus;
 
-
+/***
 let uri = "mongodb+srv://"+i+":" + j+"@cluster0.c2u9s.mongodb.net/houseDB?retryWrites=true&w=majority";
-
+***/
+let uri = utils.uri();
 await mongodbops.add(uri, "7 Main St", "dining room").catch((err)=>{
 	console.log("add:dining err:start");
 	// console.dir(err);
@@ -291,7 +296,7 @@ app.get('/pagewitha1', (req,res)=>{
 	}
 	****/
 	// Lets rely on middleware for just authentication.
-	console.log("... req="+JSON.stringify(req));
+	console.log("... req="+stringifysafe(req, null, 2));
 	res.send('new Pagewitha1 here');
 });
 
