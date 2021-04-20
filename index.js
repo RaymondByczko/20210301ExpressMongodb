@@ -143,14 +143,7 @@ passport.use(new LocalStrategy(async function(username, password, done){
 
 	let userDocument = await mongodbops.getUser(uri, username);
 	console.log("passport:use:userDocument="+userDocument);
-	/*****
-	if (username != 'blue') {
-		return done(null, false, { message: 'Incorrect username.' });
-	}
-	if (password != 'fisherman') {
-		return done(null, false, { message: 'Incorrect password.' });
-	}
-	*****/
+
 	if (userDocument == null) {
 		// no account with that user
 		console.log("... username not found");
@@ -167,20 +160,6 @@ passport.use(new LocalStrategy(async function(username, password, done){
 app.use(util.lookfor("isAuthenticated", "NEW STRATEGY"));
 app.use(passport.initialize());
 
-/***
-function lookfor(prop1, after) {
-	return (req,res,next)=>{
-		console.log(after)
-		if (req[prop1]){
-			console.log("... " + prop1 + " exists");
-		}
-		else {
-			console.log("... " + prop1 + " does not exist");
-		}
-		next();
-	};
-}
-***/
 app.use(util.lookfor('isAuthenticated', 'PASSPORT.INITIALIZE'));
 app.use(passport.session());
 
@@ -203,10 +182,6 @@ app.get('/', (req, res, next)=>{
 
 app.get('/', (req, res) => {
 	console.log('... app.get');
-	//if (req.session.user) //{
-	//} else {
-		// req.session.user = 'donut';
-	//}
   res.render('index', {dbStatus: mongodbContact, title:'Express Mongo App',message:'Hi there'});
 });
 
