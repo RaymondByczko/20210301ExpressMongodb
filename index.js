@@ -1,8 +1,10 @@
 const express = require('express');
+const stringifysafe = require('json-stringify-safe');
 const { MongoClient } = require("mongodb");
 const json2html = require("node-json2html");
 const mongodbqo  = require("./mongodbqo"); //.working;
 const mongodbops = require("./mongodbops");
+const util = require("./util");
 const conlogin = require("./controllers/conlogin");
 const texttoimage = require("text-to-image");
 const cors = require('cors');
@@ -28,22 +30,26 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('views', './views');
 
+
 let i=process.env.I;
 let j=process.env.J;
+
 let s1=process.env.S1;
 
 let pingStatus = await mongodbops.pingWithCredentials(i,j);
 let mongodbContact = pingStatus;
 
-
+/***
 let uri = "mongodb+srv://"+i+":" + j+"@cluster0.c2u9s.mongodb.net/houseDB?retryWrites=true&w=majority";
-
+***/
+let uri = util.uri();
 await mongodbops.add(uri, "7 Main St", "dining room").catch((err)=>{
 	console.log("add:dining err:start");
 	// console.dir(err);
 	console.log("add:dining err:end");
 });
 
+/*****
 function lookfor(prop1, after) {
 	return (req,res,next)=>{
 		console.log(after)
@@ -56,6 +62,7 @@ function lookfor(prop1, after) {
 		next();
 	};
 }
+*****/
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -103,7 +110,7 @@ passport.serializeUser(async function(user, done) {
 	done(null, done_info);
 });
 
-app.use(lookfor('isAuthenticated', 'PREDESERIAL'));
+app.use(util.lookfor('isAuthenticated', 'PREDESERIAL'));
 passport.deserializeUser(function(user, done) {
 		// TODO check this
 		console.log('... tryng deserializeUser');
@@ -127,7 +134,7 @@ function lookfor(prop1, after) {
 	};
 }
 **/
-app.use(lookfor('isAuthenticated', 'PRIOR NEW LOCAL'));
+app.use(util.lookfor('isAuthenticated', 'PRIOR NEW LOCAL'));
 
 passport.use(new LocalStrategy(async function(username, password, done){
 	console.log('passport.use::START');
@@ -136,14 +143,7 @@ passport.use(new LocalStrategy(async function(username, password, done){
 
 	let userDocument = await mongodbops.getUser(uri, username);
 	console.log("passport:use:userDocument="+userDocument);
-	/*****
-	if (username != 'blue') {
-		return done(null, false, { message: 'Incorrect username.' });
-	}
-	if (password != 'fisherman') {
-		return done(null, false, { message: 'Incorrect password.' });
-	}
-	*****/
+
 	if (userDocument == null) {
 		// no account with that user
 		console.log("... username not found");
@@ -157,24 +157,10 @@ passport.use(new LocalStrategy(async function(username, password, done){
 	return done(null, username);
 }));
 
-app.use(lookfor("isAuthenticated", "NEW STRATEGY"));
+app.use(util.lookfor("isAuthenticated", "NEW STRATEGY"));
 app.use(passport.initialize());
 
-/***
-function lookfor(prop1, after) {
-	return (req,res,next)=>{
-		console.log(after)
-		if (req[prop1]){
-			console.log("... " + prop1 + " exists");
-		}
-		else {
-			console.log("... " + prop1 + " does not exist");
-		}
-		next();
-	};
-}
-***/
-app.use(lookfor('isAuthenticated', 'PASSPORT.INITIALIZE'));
+app.use(util.lookfor('isAuthenticated', 'PASSPORT.INITIALIZE'));
 app.use(passport.session());
 
 app.use(flash());
@@ -196,10 +182,6 @@ app.get('/', (req, res, next)=>{
 
 app.get('/', (req, res) => {
 	console.log('... app.get');
-	//if (req.session.user) //{
-	//} else {
-		// req.session.user = 'donut';
-	//}
   res.render('index', {dbStatus: mongodbContact, title:'Express Mongo App',message:'Hi there'});
 });
 
@@ -291,7 +273,7 @@ app.get('/pagewitha1', (req,res)=>{
 	}
 	****/
 	// Lets rely on middleware for just authentication.
-	console.log("... req="+JSON.stringify(req));
+	console.log("... req="+stringifysafe(req, null, 2));
 	res.send('new Pagewitha1 here');
 });
 
