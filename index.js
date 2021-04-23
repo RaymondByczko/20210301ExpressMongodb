@@ -243,6 +243,7 @@ app.get('/pagewithnoa', (req,res)=>{
 // In this enhanced example, give an array for set of routes.
 
 app.get(['/pagewitha1', '/pagewitha2'], (req, res,next)=>{
+	console.log("app.get pagewitha1[2]");
 	if (req.isAuthenticated()){
 		console.log("... " + req.path + " is Authenticated");
 		next();
