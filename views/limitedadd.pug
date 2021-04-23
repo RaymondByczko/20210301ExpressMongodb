@@ -1,0 +1,79 @@
+html
+	head
+		meta(
+			name="viewport" content="width=device-width, initial-scale=1.0"
+		)
+		title= title
+		link(href='style.css' rel='stylesheet'
+		type='text/css')
+		script
+			include ../mongodbops.js
+	body(class='flex-container')
+		DIV(class='dbstatus-parent')
+			DIV(class='dbstatus-success') Database Status
+			if dbStatus == 'pingfailed'
+				DIV(class='dbstatus-failed', id='dbstatus_id') #{dbStatus}
+			else
+				DIV(class='dbstatus-success' id='dbstatus_id') #{dbStatus}
+		DIV
+			BUTTON(class='dbcheck', type='button', onclick="fetch('/dbstatus').then(response => response.json()).then(data => {alert(JSON.stringify(data));document.querySelector('#dbstatus_id').innerHTML = data.pingstatus;})") Check
+		DIV
+			H1(class='h1_class') #{message}
+		DIV
+			form(action='/limited' method='post')
+				label(
+					for='goodloginattempts'
+					class='home-label'
+				) 	Enter Good Login Attempts
+				input(
+					type='text'
+					name='goodloginattempts'
+				)
+				br()
+				br()
+				label(
+					for='timeofday'
+					class='home-label'
+				) 	Enter Time Of Day
+				input(
+					type='text'
+					name='timeofday'
+				)
+				br()
+				br()
+				label(
+					for='dayofweek'
+					class='home-label'
+				) Enter Day of Week
+				select(
+					name='dayofweek'
+					id='id_dayofweek'
+				)
+					option(
+						value='Sunday'
+					) Sunday
+					option(
+						value='Monday'
+					) Monday
+				label(
+					for='id_active'
+					class='home-label'
+				) Enter Active Status
+				select(
+					name='active'
+					id='id_active'
+				)
+					option(
+						value="true"
+					) active
+					option(
+						value="false"
+					) notactive
+				br()
+				br()
+				input(
+					type='submit'
+					Value='Submit'
+				)
+				br()
+				br()
