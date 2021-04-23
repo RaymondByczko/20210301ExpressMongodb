@@ -15,21 +15,25 @@ mongoose.connect
 (uri, {useNewUrlParser: true, useUnifiedTopology: true}).catch((err)=>{onMError(err);});
 
 const Schema = mongoose.Schema;
+const options = {
+	discriminatorKey: 'kind'
+}
 
 const UserSchema = new Schema({
-	name: {
-		type: String
+		name: {
+			type: String
+		},
+		password: {
+			type: String
+		},
+		role: {
+			type: String
+		},
+		active: {
+			type: Boolean
+		}
 	},
-	password: {
-		type: String
-	},
-	role: {
-		type: String
-	},
-	active: {
-		type: Boolean
-	}
-});
+	options);
 
 let colName = "usersCOL";
 const Rooms = mongoose.model('UsersCol', UserSchema, colName);

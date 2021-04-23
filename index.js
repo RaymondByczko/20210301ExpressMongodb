@@ -49,20 +49,6 @@ await mongodbops.add(uri, "7 Main St", "dining room").catch((err)=>{
 	console.log("add:dining err:end");
 });
 
-/*****
-function lookfor(prop1, after) {
-	return (req,res,next)=>{
-		console.log(after)
-		if (req[prop1]){
-			console.log("... " + prop1 + " exists");
-		}
-		else {
-			console.log("... " + prop1 + " does not exist");
-		}
-		next();
-	};
-}
-*****/
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -120,20 +106,6 @@ passport.deserializeUser(function(user, done) {
   }
 );
 
-/**
-function lookfor(prop1, after) {
-	return (req,res,next)=>{
-		console.log(after)
-		if (req[prop1]){
-			console.log("... " + prop1 + " exists");
-		}
-		else {
-			console.log("... " + prop1 + " does not exist");
-		}
-		next();
-	};
-}
-**/
 app.use(util.lookfor('isAuthenticated', 'PRIOR NEW LOCAL'));
 
 passport.use(new LocalStrategy(async function(username, password, done){

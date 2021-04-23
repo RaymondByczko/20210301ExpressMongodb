@@ -20,62 +20,60 @@ html
 		DIV
 			H1(class='h1_class') #{message}
 		DIV
-			form(action='/' method='post')
+			form(action='/limited' method='post')
 				label(
-					for='fish'
+					for='goodloginattempts'
 					class='home-label'
-				) 	Enter fish
+				) 	Enter Good Login Attempts
 				input(
 					type='text'
-					name='fish'
+					name='goodloginattempts'
 				)
+				br()
+				br()
+				label(
+					for='timeofday'
+					class='home-label'
+				) 	Enter Time Of Day
+				input(
+					type='text'
+					name='timeofday'
+				)
+				br()
+				br()
+				label(
+					for='dayofweek'
+					class='home-label'
+				) Enter Day of Week
+				select(
+					name='dayofweek'
+					id='id_dayofweek'
+				)
+					option(
+						value='Sunday'
+					) Sunday
+					option(
+						value='Monday'
+					) Monday
+				label(
+					for='id_active'
+					class='home-label'
+				) Enter Active Status
+				select(
+					name='active'
+					id='id_active'
+				)
+					option(
+						value="true"
+					) active
+					option(
+						value="false"
+					) notactive
 				br()
 				br()
 				input(
 					type='submit'
-					Value='Submit fish'
+					Value='Submit'
 				)
 				br()
 				br()
-				DIV(class='flex-container')
-					DIV
-						label(
-							for='houseAddress'
-							class='home-label'
-						) Enter Home Address
-					DIV
-						input(
-							type='text'
-							name='houseAddress'
-						)
-				br()
-				br()
-				label(
-					for="roomName"
-					class='home-label'
-				) Enter Room Name
-				input(
-					type='text'
-					name='roomName'
-				)
-				br()
-				br()
-				label(
-					for="location"
-					class='home-label'
-				) Enter Location
-				input(
-					type='text'
-					name='location'
-				)
-				br()
-				br()
-				label(
-					for="sqfootage"
-					class='home-label'
-				) Enter Sq. Footage
-				input(
-					type='text'
-					name='sqfootage'
-				)
-		include foot.pug
