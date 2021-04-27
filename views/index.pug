@@ -8,7 +8,11 @@ html
 		type='text/css')
 		script
 			include ../mongodbops.js
+		// script(src='multipletimerange.js', type='application/javascript')
+			
 	body(class='flex-container')
+		script
+			|../tmpscript.js
 		DIV(class='dbstatus-parent')
 			DIV(class='dbstatus-success') Database Status
 			if dbStatus == 'pingfailed'
@@ -17,6 +21,9 @@ html
 				DIV(class='dbstatus-success' id='dbstatus_id') #{dbStatus}
 		DIV
 			BUTTON(class='dbcheck', type='button', onclick="fetch('/dbstatus').then(response => response.json()).then(data => {alert(JSON.stringify(data));document.querySelector('#dbstatus_id').innerHTML = data.pingstatus;})") Check
+		DIV
+			multiple-timerange(
+			) MT1
 		DIV
 			H1(class='h1_class') #{message}
 		DIV
@@ -79,3 +86,5 @@ html
 					name='sqfootage'
 				)
 		include foot.pug
+		script(src='multipletimerange.js', type='application/javascript')
+		// script(src="../webcomponents/multipletimerange.js")

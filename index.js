@@ -53,6 +53,7 @@ await mongodbops.add(uri, "7 Main St", "dining room").catch((err)=>{
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("css"));
+app.use(express.static("webcomponents"));
 app.use ((err, req, res, next)=>{
 	console.log('err='+err.stack);
 	res.status(500).send('Something broken');
