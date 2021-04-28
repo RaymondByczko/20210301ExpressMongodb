@@ -34,8 +34,9 @@ class MultipleTimeRange extends HTMLElement {
 	}
 	get value() {
 		alert('getting value');
-		// alert('this.time1='+this.time1.value);
-		return {timeStart: "11:00:00", timeEnd: "11:22:00"}
+		alert('this.time1='+this.time1.value);
+		// @todo may put in check for time1 and time2
+		return {timeStart: this.time1.value, timeEnd: this.time2.value};
 ;	}
 }
 

@@ -25,7 +25,7 @@ html
 			multiple-timerange(id="multipletimerange_id"
 			) MT1
 		DIV
-			BUTTON(type='button', onclick="alert('mtr='+document.getElementById('multipletimerange_id').value)") Get MT
+			BUTTON(type='button', onclick="alert('mtr='+JSON.stringify(document.getElementById('multipletimerange_id').value))") Get MT
 			BUTTON(type='button', onclick="alert('test')") TESTit
 		DIV
 			H1(class='h1_class') #{message}
