@@ -22,8 +22,11 @@ html
 		DIV
 			BUTTON(class='dbcheck', type='button', onclick="fetch('/dbstatus').then(response => response.json()).then(data => {alert(JSON.stringify(data));document.querySelector('#dbstatus_id').innerHTML = data.pingstatus;})") Check
 		DIV
-			multiple-timerange(
+			multiple-timerange(id="multipletimerange_id"
 			) MT1
+		DIV
+			BUTTON(type='button', onclick="alert('mtr='+document.getElementById('multipletimerange_id').value)") Get MT
+			BUTTON(type='button', onclick="alert('test')") TESTit
 		DIV
 			H1(class='h1_class') #{message}
 		DIV
