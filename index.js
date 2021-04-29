@@ -425,7 +425,7 @@ async function mainapp() {
 	);
 
 	app.post('/limited', async (req,res)=>{
-		await conlimited.addLimited();
+		await conlimited.addLimited(req, res);
 	}
 	);
 

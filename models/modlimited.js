@@ -26,6 +26,7 @@
 */
 const mongoose = require('mongoose');
 const util = require('../util');
+let Rooms = null;
 
 function produceLimited() {
 let i=process.env.I;
@@ -51,20 +52,11 @@ const TimeSchema = new Schema({
 const TimeRangeSchema = new Schema({
 	startTime: TimeSchema,
 	endTime: TimeSchema,
-	required: function() {
+	/***
+	requirednotused: function() {
 		let startTimeSeconds = startTime.hour*60*60+startTime.minute*60+ startTime.second;
 		let endTimeSeconds = startTime.hour*60*60+startTime.minute*60+ startTime.second;
-		/**** 
-		let endTimeSeconds = 
-		if (startTime.hour > endTime.hour) {
-			return true;
-		}
-		if (startTime.hour == endTime.hour) {
-			if (startTime.minute > endTime.minute) {
-				return true
-			}
-		}
-		****/
+	
 		if (startTimeSeconds < endTimeSeconds) {
 			return true;
 		}
@@ -72,6 +64,7 @@ const TimeRangeSchema = new Schema({
 			return false;
 		}
 	}
+	***/
 });
 
 // A set of Limitations as applied to each
@@ -81,7 +74,27 @@ const LimitedSchema = new Schema({
 		type: Number
 	},
 	byTimeOfDay: {
-		type: [ TimeRangeSchema]
+		// type: [ TimeRangeSchema]
+		type: TimeRangeSchema,
+		default: ()=>({}),
+		required: function() {
+///sta
+		console.log('INSIDE REQUIRED');
+		console.log('... byTimeOfDay='+JSON.stringify(this.byTimeOfDay));
+		console.log('... this= '+JSON.stringify(this));
+		console.log('... this._id='+JSON.stringify(this._id));
+		let startTimeSeconds = this.byTimeOfDay.startTime.hour*60*60+this.byTimeOfDay.startTime.minute*60+ this.byTimeOfDay.startTime.second;
+		let endTimeSeconds = this.byTimeOfDay.startTime.hour*60*60+this.byTimeOfDay.startTime.minute*60+ this.byTimeOfDay.startTime.second;
+		console.log("startTimeSeconds="+startTimeSeconds);
+		console.log("endTimeSeconds="+endTimeSeconds);
+		if (startTimeSeconds < endTimeSeconds) {
+			return true;
+		}
+		else {
+			return false;
+		}
+		}
+///end
 	},
 	byDayOfWeek: {
 		type: [ String ]
@@ -126,7 +139,9 @@ const LimitedSchema = new Schema({
  */
 
 let colName = "limitsCOL";
-const Rooms = mongoose.model('LimitedCol', LimitedSchema, colName);
+if (Rooms == null){
+	Rooms = mongoose.model('LimitedCol', LimitedSchema, colName);
+}
 return Rooms;
 }
 
