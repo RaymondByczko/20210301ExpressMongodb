@@ -25,7 +25,7 @@
 	routes are possible.  
 */
 const mongoose = require('mongoose');
-const util = require('util');
+const util = require('../util');
 
 function produceLimited() {
 let i=process.env.I;
@@ -96,7 +96,7 @@ const LimitedSchema = new Schema({
 		type: Number
 	},
 	bySizeOfImageUpload: {
-		[Number, Number]
+		type: [Number, Number]
 	}
 });
 

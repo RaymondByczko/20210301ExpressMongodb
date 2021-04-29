@@ -22,25 +22,27 @@ html
 		DIV
 			form(action='/limited' method='post')
 				label(
-					for='goodloginattempts'
+					for='byGoodLoginAttempts'
 					class='home-label'
 				) 	Enter Good Login Attempts
 				input(
 					type='text'
-					name='goodloginattempts'
+					name='byGoodLoginAttempts'
 				)
 				br()
 				br()
 				label(
-					for='timeofday'
+					for='byTimeOfDay'
 					class='home-label'
 				) 	Enter Time Of Day
 				input(
 					type='text'
-					name='timeofday'
+					name='byTimeOfDay'
 				)
 				br()
 				br()
+				multiple-timerange(id="multipletimerange_id"
+				) MT1
 				label(
 					for='dayofweek'
 					class='home-label'
@@ -55,6 +57,18 @@ html
 					option(
 						value='Monday'
 					) Monday
+				br()
+				br()
+				label(
+					for='bytimetotal'
+					class='home-label'
+				) Time Total
+				input(
+					type="text"
+					name="bytimetotal"
+				)
+				br()
+				br()
 				label(
 					for='id_active'
 					class='home-label'
@@ -77,3 +91,4 @@ html
 				)
 				br()
 				br()
+				script(src='multipletimerange.js', type='application/javascript')
