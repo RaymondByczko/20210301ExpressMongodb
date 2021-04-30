@@ -1,9 +1,9 @@
 // customElements('multiple-timerange', MultipleTimeRange);
-alert("inside file: multipletimerange.js");
+// alert("inside file: multipletimerange.js");
 class MultipleTimeRange extends HTMLElement {
 	constructor() {
 		super();
-		let sampleReturn = {timeStart: {hour:11,minute:23, second:33}, timeEnd: {hour:11,minute:34, second:55}};
+		let sampleReturn = {startTime: {hour:6,minute:31, second:33}, endTime: {hour:6,minute:32, second:44}};
 		
 		if (this.attachInternals) {
 			console.log('ATTACHINTERNALS EXISTS');
@@ -48,7 +48,7 @@ class MultipleTimeRange extends HTMLElement {
 		alert('id_attr='+id_attr);
 		shadowRoot.append(style);
 		shadowRoot.append(wrapper);
-		alert('MultipleTimeRange::constructor::end');
+		// alert('MultipleTimeRange::constructor::end');
 	}
 	get value() {
 		alert('getting value');

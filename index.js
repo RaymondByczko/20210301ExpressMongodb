@@ -53,6 +53,7 @@ async function mainapp() {
 
 	app.use(cors());
 	app.use(bodyParser.urlencoded({ extended: true }));
+	app.use(bodyParser.json());
 	app.use(express.static("css"));
 	app.use(express.static("webcomponents"));
 	app.use((err, req, res, next) => {
@@ -425,6 +426,12 @@ async function mainapp() {
 	);
 
 	app.post('/limited', async (req,res)=>{
+		console.log('app.post limited:start');
+		console.log('... req.body='+JSON.stringify(req.body));
+		let byTimeOfDayParsed = JSON.parse(req.body.byTimeOfDay);
+		console.log('... byTimeOfDayParsed='+byTimeOfDayParsed);
+		console.log('... byTimeOfDayParsed='+JSON.stringify(byTimeOfDayParsed));
+		req.body.byTimeOfDay = byTimeOfDayParsed;
 		await conlimited.addLimited(req, res);
 	}
 	);

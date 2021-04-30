@@ -26,7 +26,10 @@
 */
 const mongoose = require('mongoose');
 const util = require('../util');
-let Rooms = null;
+
+let Time = null;
+let TimeRange = null;
+let Limited = null
 
 function produceLimited() {
 let i=process.env.I;
@@ -49,9 +52,17 @@ const TimeSchema = new Schema({
 	minute: {type: Number, min:0, max:59},
 	second: {type: Number, min:0, max:59}
 });
+
+if (Time == null){
+	let colName = 'timeCOL';
+	Time = mongoose.model('TimeCol', TimeSchema, colName);
+}
+
 const TimeRangeSchema = new Schema({
-	startTime: TimeSchema,
-	endTime: TimeSchema,
+	/// startTime: TimeSchema,
+	/// endTime: TimeSchema,
+	startTime: Time.schema,
+	endTime: Time.schema
 	/***
 	requirednotused: function() {
 		let startTimeSeconds = startTime.hour*60*60+startTime.minute*60+ startTime.second;
@@ -67,6 +78,11 @@ const TimeRangeSchema = new Schema({
 	***/
 });
 
+if (TimeRange == null){
+	let colName = 'timeRangeCOL';
+	TimeRange = mongoose.model('TimeRangeCol', TimeRangeSchema, colName);
+}
+
 // A set of Limitations as applied to each
 // user of a website.
 const LimitedSchema = new Schema({
@@ -75,11 +91,13 @@ const LimitedSchema = new Schema({
 	},
 	byTimeOfDay: {
 		// type: [ TimeRangeSchema]
-		type: TimeRangeSchema,
+		// type: TimeRangeSchema,
+		type: TimeRange.schema,
 		default: ()=>({timeStart:{hour:11, minute:22,second:44}, timeEnd: {hour:11,minute:24,second:33}}),
 		required: function() {
 ///sta
 		console.log('INSIDE REQUIRED');
+		return true;
 		console.log('... byTimeOfDay='+JSON.stringify(this.byTimeOfDay));
 		console.log('... this= '+JSON.stringify(this));
 		console.log('... this._id='+JSON.stringify(this._id));
@@ -139,10 +157,10 @@ const LimitedSchema = new Schema({
  */
 
 let colName = "limitsCOL";
-if (Rooms == null){
-	Rooms = mongoose.model('LimitedCol', LimitedSchema, colName);
+if (Limited == null){
+	Limited = mongoose.model('LimitedCol', LimitedSchema, colName);
 }
-return Rooms;
+return Limited;
 }
 
 exports.produceLimited = produceLimited;
