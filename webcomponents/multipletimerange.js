@@ -3,6 +3,24 @@ alert("inside file: multipletimerange.js");
 class MultipleTimeRange extends HTMLElement {
 	constructor() {
 		super();
+		let sampleReturn = {timeStart: {hour:11,minute:23, second:33}, timeEnd: {hour:11,minute:34, second:55}};
+		
+		if (this.attachInternals) {
+			console.log('ATTACHINTERNALS EXISTS');
+		}
+		else {
+			console.log('ATTACHINTERNALS DOESNT EXIST');
+		}
+		let idf=this.getAttribute('id_form');
+		console.log('idf='+idf);
+		let name=this.getAttribute('name');
+		let eIdf = document.getElementById(idf);
+		var y = document.createElement("INPUT");
+  	y.setAttribute("type", "hidden");
+		y.setAttribute("name",name);
+  	y.setAttribute("value",JSON.stringify(sampleReturn));
+  	eIdf.appendChild(y);
+		
 		let shadowRoot = this.attachShadow({mode: 'open'});
 		const wrapper = document.createElement('div');
 		const time1 = document.createElement('input');
@@ -21,8 +39,8 @@ class MultipleTimeRange extends HTMLElement {
 		let nodes = slot.assignedNodes();
 		// alert("nodes[0]="+nodes[0].nodeValue);
 		// debugger;
-		alert("textContent="+this.textContent);
-		// alert("text="+this.text);
+		// alert("textContent="+this.textContent);
+		
 		const style = document.createElement('style');
 		style.textContent = `.wrapper_class { border: solid red 2px; width: 10em; height: 5em;
 		}`;
@@ -36,7 +54,8 @@ class MultipleTimeRange extends HTMLElement {
 		alert('getting value');
 		alert('this.time1='+this.time1.value);
 		// @todo may put in check for time1 and time2
-		return {timeStart: this.time1.value, timeEnd: this.time2.value};
+		// return {timeStart: this.time1.value, timeEnd: this.time2.value};
+		return {timeStart: {hour:11,minute:23, second:33}, timeEnd: {hour:11,minute:34, second:55}};
 ;	}
 }
 

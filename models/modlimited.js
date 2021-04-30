@@ -76,7 +76,7 @@ const LimitedSchema = new Schema({
 	byTimeOfDay: {
 		// type: [ TimeRangeSchema]
 		type: TimeRangeSchema,
-		default: ()=>({}),
+		default: ()=>({timeStart:{hour:11, minute:22,second:44}, timeEnd: {hour:11,minute:24,second:33}}),
 		required: function() {
 ///sta
 		console.log('INSIDE REQUIRED');

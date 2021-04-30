@@ -20,7 +20,7 @@ html
 		DIV
 			H1(class='h1_class') #{message}
 		DIV
-			form(action='/limited' method='post')
+			form(action='/limited' method='post' id='id_form_limitedadd')
 				label(
 					for='byGoodLoginAttempts'
 					class='home-label'
@@ -35,20 +35,21 @@ html
 					for='byTimeOfDay'
 					class='home-label'
 				) 	Enter Time Of Day
-				input(
-					type='text'
-					name='byTimeOfDay'
-				)
+				//-input(
+				//-	type='text'
+				//-	name='byTimeOfDay'
+				//-)
 				br()
 				br()
-				multiple-timerange(id="multipletimerange_id" name="timerange1"
+				multiple-timerange(id="multipletimerange_id" name="byTimeOfDay"
+				id_form="id_form_limitedadd"
 				) MT1
 				label(
-					for='dayofweek'
+					for='byDayOfWeek'
 					class='home-label'
 				) Enter Day of Week
 				select(
-					name='dayofweek'
+					name='byDayOfWeek'
 					id='id_dayofweek'
 				)
 					option(
