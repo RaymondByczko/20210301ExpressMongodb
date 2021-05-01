@@ -29,9 +29,11 @@ class MultipleTimeRange extends HTMLElement {
 		let name=this.getAttribute('name');
 		let eIdf = document.getElementById(idf);
 		var y = document.createElement("INPUT");
+		this.hiddenElement = y;
   	y.setAttribute("type", "hidden");
 		y.setAttribute("name",name);
-  	y.setAttribute("value",JSON.stringify(sampleReturn));
+  	// y.setAttribute("value",JSON.stringify(sampleReturn));
+		y.setAttribute("value", JSON.stringify(this.calcReturn));
   	eIdf.appendChild(y);
 		
 		let shadowRoot = this.attachShadow({mode: 'open'});
@@ -88,6 +90,7 @@ class MultipleTimeRange extends HTMLElement {
 	
 		console.log('calcReturn='+this.calcReturn);
 		console.log('calcReturn(str)='+JSON.stringify(this.calcReturn));
+		this.hiddenElement.setAttribute("value", JSON.stringify(this.calcReturn));
 	}
 	time2Changed(e){
 		console.log('time2Changed:'+e.target.value);
@@ -103,6 +106,7 @@ class MultipleTimeRange extends HTMLElement {
 		}
 		console.log('calcReturn='+this.calcReturn);
 		console.log('calcReturn(str)='+JSON.stringify(this.calcReturn));
+		this.hiddenElement.setAttribute("value", JSON.stringify(this.calcReturn));
 	}
 	// calcReturn = null;
 	calcReturn = {
