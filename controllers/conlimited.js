@@ -1,3 +1,17 @@
+/*
+ * This is a controller invoked by the route call back.
+ * It provides the major function,
+ * addLimited, that is invoked by
+ * that callback.  Basically, a Limited document is added to the Limited collection.
+ * Here is how it works.
+ * 
+ * When produceLimited is invoked, the
+ * Limited model is returned.  That
+ * model is used to add a Limited document
+ * to a collection.  To see what is
+ * stored in a Limited document, see
+ * models/modlimited.
+ */
 const produceLimited  = require('../models/modlimited').produceLimited;
 const bcryptjs = require('bcryptjs');
 

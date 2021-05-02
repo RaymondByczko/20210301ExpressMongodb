@@ -1,3 +1,11 @@
+/*
+ * This file provides a controller called by a
+ * routing callback, allowing
+ * for the eventual adding a Rooms
+ * document to its corresponding
+ * collecton.
+ */
+
 const produceRooms  = require('../models/modroom').produceRooms;
 
 async function addRoom(req, res) {
