@@ -13,33 +13,19 @@
  * models/modlimited.
  */
 const produceLimited  = require('../models/modlimited').produceLimited;
-const bcryptjs = require('bcryptjs');
 
 async function addLimited(req, res) {
 	console.log("addLimited:start");
 	console.log("... req.body="+req.body);
 	console.log("... req.body(str)="+JSON.stringify(req.body));
 	let Limited = produceLimited();
-	// console.log("... req.body.name="+req.body.name);
+	
 	/*
-	req.body = {
-		byGoodLoginAttempts:22,
-		active: true,
-		byTimeOfDay: {
-			startTime: {
-				hour:22,
-				minute:11,
-				second:58
-			},
-			endTime: {
-				hour:23,
-				minute:12,
-				second:33
-			}
-		},
-		bytimetotal: "25"
-	}
-	*/
+	 * The following code fragement represents an interesting way
+	 * to directly override the
+	 * 'byTimeOfDay' part that will
+	 * injected into the document.
+	 */
 	/*
 	req.body.byTimeOfDay = {
 			startTime: {

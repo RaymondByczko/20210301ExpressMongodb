@@ -10,12 +10,7 @@
 function get_login(mongodbContact){
 return (req, res)=>{
 	console.log('... conlogin.get_login');
-	/**
-	if (req.session.user) {
-	} else {
-		req.session.user = 'donut';
-	}
-	**/
+	
   res.render('login', {dbStatus: mongodbContact, title:'Express Mongo App',message:'Please login here'});
 };
 }

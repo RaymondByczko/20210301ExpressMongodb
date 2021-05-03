@@ -31,12 +31,10 @@ async function addRoomNoRes(req, res) {
 	newRoom.save((err, room)=>{
 		if (err) {
 			console.log("addRoomNoRes:err="+err);
-			// res.send(err);
 			return false;
 		}
 		else {
 			console.log("addRoomNoRes:noerr");
-			// res.json(room);
 			return true;
 		}
 	})
