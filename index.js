@@ -11,6 +11,7 @@ const cors = require('cors');
 const conroom = require("./controllers/conroom");
 const conuser = require("./controllers/conuser");
 const conlimited = require("./controllers/conlimited");
+const midlimited = require("./middleware/midlimited");
 const pug = require('pug');
 
 const canvas = require('canvas');
@@ -227,6 +228,13 @@ async function mainapp() {
 			res.redirect('./accessprohibited');
 		}
 	});
+
+	function midlimitedtemp(req, res, next) {
+		console.log('midlimited:START');
+		next();
+	}
+	app.get(['/pagewitha1', '/pagewitha2'], midlimited.midlimited);
+
 	app.get('/pagewitha1', (req, res) => {
 		//passport.authorize('local', {failureRedirect:'./accessprohibited'});
 
