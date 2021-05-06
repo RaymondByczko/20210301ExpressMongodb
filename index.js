@@ -13,6 +13,7 @@ const conuser = require("./controllers/conuser");
 const conlimited = require("./controllers/conlimited");
 const midlimited = require("./middleware/midlimited");
 const pug = require('pug');
+const path = require('path');
 
 const canvas = require('canvas');
 var bodyParser = require('body-parser');
@@ -51,12 +52,38 @@ async function mainapp() {
 		console.log("add:dining err:end");
 	});
 
+	////
+	// DIFFERENT WAYS OF EXPLORING express.static
+	// See p.161, Diary#16
+	////
+	// One way of using express.static
+	//  - not active at this time
+	if (false) {
+	app.use(express.static(path.join(__dirname,"css")));
+	app.use(express.static(path.join(__dirname,"webcomponents")));
+	app.use('/limiteduserjoin',express.static(path.join(__dirname,"css")));
+	app.use('/limiteduserjoin', express.static(path.join(__dirname,"webcomponents")));
+	}
+
+	// A second way of using express.static
+	//  - not active at this time
+	if (false) {
+	app.use(express.static("css"));
+	app.use(express.static("webcomponents"));
+	app.use('/limiteduserjoin', express.static("css"));
+	app.use('/limiteduserjoin', express.static("webcomponents"));
+	app.use('/limited/user', express.static("css"));
+	app.use('/limited/user', express.static("webcomponents"));
+	}
+
+	app.use(express.static("css"));
+	app.use(express.static("webcomponents"));
+
 
 	app.use(cors());
 	app.use(bodyParser.urlencoded({ extended: true }));
 	app.use(bodyParser.json());
-	app.use(express.static("css"));
-	app.use(express.static("webcomponents"));
+	
 	app.use((err, req, res, next) => {
 		console.log('err=' + err.stack);
 		res.status(500).send('Something broken');
@@ -443,6 +470,37 @@ async function mainapp() {
 		await conlimited.addLimited(req, res);
 	}
 	);
+	app.get('/limited/user/join', async (req,res)=>{
+		console.log('app.get /limited/user/join');
+		// present the forms to allow joining two collections with a third collection.
+		res.render('limiteduserjoin', {
+			dbStatus: mongodbContact, title: 'Express Mongo App', message:'limited-user-join here'});
+	});
+
+	/*
+	 * /useall - an endpoint for getting all
+	 * of the documents in the Users collection.
+	 *  - currently it is stubbed with a
+	 *  non-mongodb test implementation.
+	 *  - need to add controller code to it.
+	 *  - will probably be renamed, with possible query
+	 *  parameters used.
+	 */
+	app.get('/userall', (req, res)=>{
+		console.log("app get /userall");
+		let retValue = [
+			{
+				name:"Ray",
+				id:"123456"
+			},
+			{
+				name:"Ann",
+				id:"789012"
+			}
+		];
+		return res.json(retValue);
+	});
+	
 
 	app.listen(3000, () => {
 		console.log('server started');

@@ -8,7 +8,10 @@ html
 		type='text/css')
 		script
 			include ../mongodbops.js
-	body(class='flex-container')
+		script
+			include ../util.js
+	//- body(class='flex-container' onload="alert('bodyloaded');fetch('/userall',{method:'GET'}).then(resp=>{alert('...rr='+JSON.stringify(resp)); return resp;}).then(response=>response.json()).then(resp=>{alert('...r='+JSON.stringify(resp)); return resp;}).then(data=>{produceUserSelect(data, 'id_selectuser', 'id_form_limiteduserjoin');}).catch(alert('caught'););")
+	body(class='flex-container' onload="bodyonload()")
 		DIV(class='dbstatus-parent')
 			DIV(class='dbstatus-success') Database Status
 			if dbStatus == 'pingfailed'
@@ -20,7 +23,7 @@ html
 		DIV
 			H1(class='h1_class') #{message}
 		DIV
-			form(action='/limited' method='post' id='id_form_limitedadd')
+			form(action='/limited/user/join' method='post' id='id_form_limiteduserjoin')
 				label(
 					for='byGoodLoginAttempts'
 					class='home-label'
@@ -29,6 +32,10 @@ html
 					type='text'
 					name='byGoodLoginAttempts'
 				)
+				br()
+				br()
+				DIV() USER SELECT
+					DIV(id='id_selectuser_parent' onclick='/*alert("select user please");*/')
 				br()
 				br()
 				label(
@@ -44,20 +51,7 @@ html
 				multiple-timerange(id="multipletimerange_id" name="byTimeOfDay"
 				id_form="id_form_limitedadd"
 				) MT1
-				label(
-					for='byDayOfWeek'
-					class='home-label'
-				) Enter Day of Week
-				select(
-					name='byDayOfWeek'
-					id='id_dayofweek'
-				)
-					option(
-						value='Sunday'
-					) Sunday
-					option(
-						value='Monday'
-					) Monday
+
 				br()
 				br()
 				label(
@@ -70,26 +64,7 @@ html
 				)
 				br()
 				br()
-				label(
-					for='byNumberFilesToUpload'
-					class='home-label'
-				) Number Files Upload
-				input(
-					type="text"
-					name="byNumberFilesToUpload"
-				)
-				br()
-				br()
-				label(
-					for='byNumberBadLogins'
-					class='home-label'
-				) Number Bad Logins
-				input(
-					type="text"
-					name="byNumberBadLogins"
-				)
-				br()
-				br()
+
 				label(
 					for='id_active'
 					class='home-label'
@@ -113,3 +88,4 @@ html
 				br()
 				br()
 				script(src='/multipletimerange.js', type='application/javascript')
+				script(src='/util.js', type='application/javascript')

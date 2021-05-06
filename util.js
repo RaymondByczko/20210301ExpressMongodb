@@ -33,21 +33,42 @@ function lookfor(prop1, after) {
  * 
  * The value of each select option is the id of the document.
  * 
+ * parentId is the id of the parent in which The
+ * formed select is appended to.
+ * 
  * @todo Consider that the length of usersResp can be
  * quite substantial
  */
-function populateUserSelect(usersResp, id) {
+function populateUserSelect(usersResp, id, parentId) {
 	let select = document.createElement("select");
 	select.setAttribute('id', id);
-	for (let i=0; i<userResp.length; i++) {
+	for (let i=0; i<usersResp.length; i++) {
 		let option =  document.createElement("option");
 		option.value = usersResp[i]._id;
-		option.text = usersResponse[i].name +
-			usersResponse[i].id;
+		option.text = usersResp[i].name +
+			usersResp[i].id;
 		select.appendChild(option);
 	}
+	document.querySelector('#'+parentId).appendChild(select);
+}
+
+function bodyonload() {
+	alert('bodyloaded');
+	fetch('/userall',{method:'GET'}).
+		then(resp=>{
+			alert('...rr='+JSON.stringify(resp)); return resp;
+		}).
+		then(response=>response.json()).
+		then(resp=>{
+			alert('...r='+JSON.stringify(resp)); return resp;
+			}).
+		then(data=>{
+			populateUserSelect(data, 'id_selectuser', 'id_selectuser_parent');
+			}).
+		catch(error=>alert('caught error='+error));
 }
 
 exports.uri = uri;
 exports.lookfor = lookfor;
 exports.populateUserSelect = populateUserSelect;
+exports.bodyonload = bodyonload;
