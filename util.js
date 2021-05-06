@@ -43,11 +43,13 @@ function populateUserSelect(usersResp, id, parentId) {
 	let select = document.createElement("select");
 	select.setAttribute('id', id);
 	for (let i=0; i<usersResp.length; i++) {
-		let option =  document.createElement("option");
-		option.value = usersResp[i]._id;
-		option.text = usersResp[i].name +
-			usersResp[i].id;
-		select.appendChild(option);
+		if ((usersResp[i]._id != undefined) && (usersResp[i].name != undefined)){
+			let option =  document.createElement("option");
+			option.value = usersResp[i]._id;
+			option.text = usersResp[i].name +
+			usersResp[i]._id;
+			select.appendChild(option);
+		}
 	}
 	document.querySelector('#'+parentId).appendChild(select);
 }

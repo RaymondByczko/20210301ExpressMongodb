@@ -11,6 +11,7 @@ const cors = require('cors');
 const conroom = require("./controllers/conroom");
 const conuser = require("./controllers/conuser");
 const conlimited = require("./controllers/conlimited");
+const conlimiteduserjoin = require("./controllers/conlimiteduserjoin");
 const midlimited = require("./middleware/midlimited");
 const pug = require('pug');
 const path = require('path');
@@ -486,19 +487,23 @@ async function mainapp() {
 	 *  - will probably be renamed, with possible query
 	 *  parameters used.
 	 */
-	app.get('/userall', (req, res)=>{
+	app.get('/userall', async (req, res)=>{
 		console.log("app get /userall");
-		let retValue = [
+		let userDocs = await conlimiteduserjoin.getUser(req, res);
+		// The following is suitable test data to return.
+		/**
+		let userDocs = [
 			{
-				name:"Ray",
+				name:"Person1",
 				id:"123456"
 			},
 			{
-				name:"Ann",
+				name:"Person2",
 				id:"789012"
 			}
 		];
-		return res.json(retValue);
+		**/
+		return res.json(userDocs);
 	});
 	
 
