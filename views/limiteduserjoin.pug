@@ -10,7 +10,6 @@ html
 			include ../mongodbops.js
 		script
 			include ../util.js
-	//- body(class='flex-container' onload="alert('bodyloaded');fetch('/userall',{method:'GET'}).then(resp=>{alert('...rr='+JSON.stringify(resp)); return resp;}).then(response=>response.json()).then(resp=>{alert('...r='+JSON.stringify(resp)); return resp;}).then(data=>{produceUserSelect(data, 'id_selectuser', 'id_form_limiteduserjoin');}).catch(alert('caught'););")
 	body(class='flex-container' onload="bodyonload()")
 		DIV(class='dbstatus-parent')
 			DIV(class='dbstatus-success') Database Status
@@ -35,7 +34,11 @@ html
 				br()
 				br()
 				DIV() USER SELECT
-					DIV(id='id_selectuser_parent' onclick='/*alert("select user please");*/')
+					DIV(id='id_selectuser_parent')
+				br()
+				br()
+				DIV() LIMITED SELECT
+					DIV(id='id_selectlimited_parent')
 				br()
 				br()
 				label(

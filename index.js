@@ -505,6 +505,18 @@ async function mainapp() {
 		**/
 		return res.json(userDocs);
 	});
+
+	
+	/*
+	 * Returns a json data of all documents in the
+	 * Limited collection.  name and _id are selected
+	 * in each document.
+	 */
+	app.get('/limitedall', async (req, res)=>{
+		console.log("app get /limitedall");
+		let userDocs = await conlimiteduserjoin.getLimitedAll(req, res);
+		return res.json(userDocs);
+	});
 	
 
 	app.listen(3000, () => {

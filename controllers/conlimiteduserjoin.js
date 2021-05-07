@@ -16,7 +16,11 @@ const produceLimited  = require('../models/modlimited').produceLimited;
 
 const produceUsers = require('../models/moduser').produceUsers;
 
-async function getLimited(req, res) {
+/*
+ * Gets all Limited documents which have name and _id
+ * fields.
+ */
+async function getLimitedAll(req, res) {
 	console.log("getLimited:start");
 	// console.log("... req.body="+req.body);
 	// console.log("... req.body(str)="+JSON.stringify(req.body));
@@ -26,8 +30,8 @@ async function getLimited(req, res) {
 	let Limited = produceLimited();
 
 
-	let newLimited = new Limited(req.body);
-	let allDocs = await newLimited.find({}, ["name", "_id"]).catch(processError);
+	// let newLimited = new Limited(req.body);
+	let allDocs = await Limited.find({}, ["name", "_id"]).catch(processError);
 
 	// Assume no error if this point is reached.
 	/*
@@ -46,6 +50,10 @@ async function getLimited(req, res) {
 	return allDocs;
 };
 
+/*
+ * Get all User documents with name and _id field.
+ * @todo This should probably be renamed as: getUserAll.
+ */
 async function getUser(req, res) {
 	console.log("getUser:start");
 	// console.log("... req.body="+req.body);
@@ -65,5 +73,5 @@ async function getUser(req, res) {
 	return allDocs;
 };
 
-exports.getLimited = getLimited;
+exports.getLimitedAll = getLimitedAll;
 exports.getUser = getUser;
