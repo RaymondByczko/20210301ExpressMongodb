@@ -16,6 +16,8 @@ const produceLimited  = require('../models/modlimited').produceLimited;
 
 const produceUsers = require('../models/moduser').produceUsers;
 
+const produceLimiteduserjoin = require('../models/modlimiteduserjoin').produceLimiteduserjoin;
+
 /*
  * Gets all Limited documents which have name and _id
  * fields.
@@ -54,7 +56,7 @@ async function getLimitedAll(req, res) {
  * Get all User documents with name and _id field.
  * @todo This should probably be renamed as: getUserAll.
  */
-async function getUser(req, res) {
+async function getUserAll(req, res) {
 	console.log("getUser:start");
 	// console.log("... req.body="+req.body);
 	// console.log("... req.body(str)="+JSON.stringify(req.body));
@@ -73,5 +75,31 @@ async function getUser(req, res) {
 	return allDocs;
 };
 
+/*
+ * This posts (or adds) a document into the
+ * LimitedUserJoin collection.
+ * @todo consider changing the name
+ * to utilize 'add' instead of 'post'.
+ */
+async function postLimitedUserJoin(req, res) {
+	console.log("postLimitedUserJoin: start");
+		let Limiteduserjoin = produceLimiteduserjoin();
+		//ST
+		let newLUJ = new Limiteduserjoin(req.body);
+		newLUJ.save((err, luj)=>{
+		if (err) {
+			console.log("postLimitedUserJoin:err");
+			res.send(err);
+		}
+		else {
+			console.log("postLimitedUserJoin:noerr");
+			res.json(luj);
+		}
+	})
+		//EN
+
+}
+
 exports.getLimitedAll = getLimitedAll;
-exports.getUser = getUser;
+exports.getUserAll = getUserAll;
+exports.postLimitedUserJoin = postLimitedUserJoin;

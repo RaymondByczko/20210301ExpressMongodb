@@ -479,6 +479,23 @@ async function mainapp() {
 	});
 
 	/*
+	 * This is a form action for a form found
+	 * in /limited/user/join.
+	 * 
+	 * The two important named values are:
+	 * 	selectuser
+	 *  selectlimited
+	 */
+	app.post('/limited/user/join', async(req, res)=>{
+		console.log('app.post /limited/user/join');
+		console.log('... selectuser='+ req.body.selectuser);
+		console.log('... selectlimited='+req.body.selectlimited);
+		await conlimiteduserjoin.postLimitedUserJoin(req, res);
+		// res.send('l u join processed');
+
+	});
+
+	/*
 	 * /useall - an endpoint for getting all
 	 * of the documents in the Users collection.
 	 *  - currently it is stubbed with a
@@ -489,7 +506,7 @@ async function mainapp() {
 	 */
 	app.get('/userall', async (req, res)=>{
 		console.log("app get /userall");
-		let userDocs = await conlimiteduserjoin.getUser(req, res);
+		let userDocs = await conlimiteduserjoin.getUserAll(req, res);
 		// The following is suitable test data to return.
 		/**
 		let userDocs = [

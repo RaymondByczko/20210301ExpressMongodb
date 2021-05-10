@@ -4,8 +4,8 @@ function uri(){
 	let j=process.env.J;
 	// let i=null;
 	// let j=null;
-	let uri = "mongodb+srv://"+i+":" + j+"@cluster0.c2u9s.mongodb.net/houseDB?retryWrites=true&w=majority";
-	return uri;
+	let uriValue = "mongodb+srv://"+i+":" + j+"@cluster0.c2u9s.mongodb.net/houseDB?retryWrites=true&w=majority";
+	return uriValue;
 }
 
 function lookfor(prop1, after) {
@@ -39,9 +39,10 @@ function lookfor(prop1, after) {
  * @todo Consider that the length of usersResp can be
  * quite substantial
  */
-function populateUserSelect(usersResp, id, parentId) {
+function populateUserSelect(usersResp, id, parentId, name) {
 	let select = document.createElement("select");
 	select.setAttribute('id', id);
+	select.setAttribute('name', name);
 	for (let i=0; i<usersResp.length; i++) {
 		if ((usersResp[i]._id != undefined) && (usersResp[i].name != undefined)){
 			let option =  document.createElement("option");
@@ -62,9 +63,10 @@ function populateUserSelect(usersResp, id, parentId) {
  * The id of the generated select element is specified by id.  The parent element in which the select element is put
  * into is given by parentId.
  */
-function populateLimitedSelect(limitedResp, id, parentId) {
+function populateLimitedSelect(limitedResp, id, parentId, name) {
 		let select = document.createElement("select");
 	select.setAttribute('id', id);
+	select.setAttribute('name',name);
 	for (let i=0; i<limitedResp.length; i++) {
 		if ((limitedResp[i]._id != undefined) && (limitedResp[i].name != undefined)){
 			let option =  document.createElement("option");
@@ -102,7 +104,8 @@ function bodyonload() {
 		then(data=>{
 			// @todo The following is hardcoded.  It should
 			// be a parameter.
-			populateUserSelect(data, 'id_selectuser', 'id_selectuser_parent');
+			populateUserSelect(data, 'id_selectuser', 'id_selectuser_parent',
+			'selectuser');
 			}).
 		catch(error=>alert('caught error='+error));
 
@@ -117,7 +120,8 @@ function bodyonload() {
 		then(data=>{
 			// @todo The following is hardcoded.  It should
 			// be a parameter.
-			populateLimitedSelect(data, 'id_selectlimited', 'id_selectlimited_parent');
+			populateLimitedSelect(data, 'id_selectlimited', 'id_selectlimited_parent',
+			'selectlimited');
 			}).
 		catch(error=>alert('caught error='+error));
 }

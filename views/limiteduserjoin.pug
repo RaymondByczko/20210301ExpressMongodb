@@ -23,14 +23,6 @@ html
 			H1(class='h1_class') #{message}
 		DIV
 			form(action='/limited/user/join' method='post' id='id_form_limiteduserjoin')
-				label(
-					for='byGoodLoginAttempts'
-					class='home-label'
-				) 	Enter Good Login Attempts
-				input(
-					type='text'
-					name='byGoodLoginAttempts'
-				)
 				br()
 				br()
 				DIV() USER SELECT
@@ -41,33 +33,6 @@ html
 					DIV(id='id_selectlimited_parent')
 				br()
 				br()
-				label(
-					for='byTimeOfDay'
-					class='home-label'
-				) 	Enter Time Of Day
-				//-input(
-				//-	type='text'
-				//-	name='byTimeOfDay'
-				//-)
-				br()
-				br()
-				multiple-timerange(id="multipletimerange_id" name="byTimeOfDay"
-				id_form="id_form_limitedadd"
-				) MT1
-
-				br()
-				br()
-				label(
-					for='byTimeTotal'
-					class='home-label'
-				) Time Total
-				input(
-					type="text"
-					name="byTimeTotal"
-				)
-				br()
-				br()
-
 				label(
 					for='id_active'
 					class='home-label'
@@ -90,5 +55,4 @@ html
 				)
 				br()
 				br()
-				script(src='/multipletimerange.js', type='application/javascript')
 				script(src='/util.js', type='application/javascript')

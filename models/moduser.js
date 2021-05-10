@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+let Users = null;
+
 function produceUsers() {
 let i=process.env.I;
 let j=process.env.J;
@@ -35,9 +37,11 @@ const UserSchema = new Schema({
 	},
 	options);
 
-let colName = "usersCOL";
-const Rooms = mongoose.model('UsersCol', UserSchema, colName);
-return Rooms;
+if (Users == null) {
+	let colName = "usersCOL";
+	Users = mongoose.model('UsersCol', UserSchema, colName);
+}
+return Users;
 }
 
 exports.produceUsers = produceUsers;
