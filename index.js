@@ -29,6 +29,17 @@ var flash = require('connect-flash');
 canvas.registerFont('Playfair.ttf', { family: 'Playfont' });
 // const { registerFont } = require('canvas');
 
+
+function console_log(x) {
+	let clog=process.env.CLOG;
+	if (clog) {	
+		console.log(x);
+	} else {
+		const noop=()=>{};
+		noop();
+	}
+}
+
 async function mainapp() {
 	const app = express();
 	app.set('view engine', 'pug');
@@ -48,9 +59,9 @@ async function mainapp() {
 	***/
 	let uri = util.uri();
 	await mongodbops.add(uri, "7 Main St", "dining room").catch((err) => {
-		console.log("add:dining err:start");
+		console_log("add:dining err:start");
 		// console.dir(err);
-		console.log("add:dining err:end");
+		console_log("add:dining err:end");
 	});
 
 	////
@@ -86,7 +97,7 @@ async function mainapp() {
 	app.use(bodyParser.json());
 	
 	app.use((err, req, res, next) => {
-		console.log('err=' + err.stack);
+		console_log('err=' + err.stack);
 		res.status(500).send('Something broken');
 	});
 	app.use(session({
@@ -114,13 +125,13 @@ async function mainapp() {
 	 * PASSPORT
 	 */
 	passport.serializeUser(async function(user, done) {
-		console.log('... trying serializeUser');
-		console.log('... ... user=' + user);
-		console.log('... ... user.id=' + user.id);
+		console_log('... trying serializeUser');
+		console_log('... ... user=' + user);
+		console_log('... ... user.id=' + user.id);
 		// done(null, user.id);
 
 		let userDocument = await mongodbops.getUser(uri, user);
-		console.log("... ... userDocument=" + JSON.stringify(userDocument));
+		console_log("... ... userDocument=" + JSON.stringify(userDocument));
 		done_info = userDocument._id;
 		// let done_info = user;
 		// Substitute an id name for a username.
@@ -131,8 +142,8 @@ async function mainapp() {
 	app.use(util.lookfor('isAuthenticated', 'PREDESERIAL'));
 	passport.deserializeUser(function(user, done) {
 		// TODO check this
-		console.log('... tryng deserializeUser');
-		console.log('... ...  user =' + user);
+		console_log('... tryng deserializeUser');
+		console_log('... ...  user =' + user);
 		let err = null;
 		done(err, user);
 	}
@@ -141,21 +152,21 @@ async function mainapp() {
 	app.use(util.lookfor('isAuthenticated', 'PRIOR NEW LOCAL'));
 
 	passport.use(new LocalStrategy(async function(username, password, done) {
-		console.log('passport.use::START');
-		console.log('... username=' + username);
-		console.log('... password=' + password);
+		console_log('passport.use::START');
+		console_log('... username=' + username);
+		console_log('... password=' + password);
 
 		let userDocument = await mongodbops.getUser(uri, username);
-		console.log("passport:use:userDocument=" + userDocument);
+		console_log("passport:use:userDocument=" + userDocument);
 
 		if (userDocument == null) {
 			// no account with that user
-			console.log("... username not found");
+			console_log("... username not found");
 			return done(null, false, { message: 'Incorrect username.' });
 		}
 		let compare = bcryptjs.compareSync(password, userDocument.password);
 		if (!compare) {
-			console.log("... password does not verify");
+			console_log("... password does not verify");
 			return done(null, false, { message: 'Incorrect password.' });
 		}
 		return done(null, username);
@@ -170,29 +181,29 @@ async function mainapp() {
 	app.use(flash());
 
 	app.get('/', (req, res, next) => {
-		console.log('... first handler');
+		console_log('... first handler');
 		next();
 	})
 
 	app.all('/', (req, res, next) => {
-		console.log('... app.all');
+		console_log('... app.all');
 		next();
 	});
 
 	app.get('/', (req, res, next) => {
-		console.log('... second handler');
+		console_log('... second handler');
 		next();
 	})
 
 	app.get('/', (req, res) => {
-		console.log('... app.get');
+		console_log('... app.get');
 		res.render('index', { dbStatus: mongodbContact, title: 'Express Mongo App', message: 'Hi there' });
 	});
 
 	app.get('/login', conlogin.get_login(mongodbContact));
 
 	app.post('/login', /*(req, res, next)=>{*/
-		// console.log('... app.post preauthenticate');
+		// console_log('... app.post preauthenticate');
 		passport.authenticate('local', {
 			successRedirect: './',
 			failureRedirect: './loginfailed',
@@ -203,15 +214,15 @@ async function mainapp() {
 	// })
 
 	app.post('/login', (req, res) => {
-		console.log('... app.post login');
-		console.log('... ... req.body.username=' + req.body.username);
-		console.log('... ... req.body.password=' + req.body.password);
+		console_log('... app.post login');
+		console_log('... ... req.body.username=' + req.body.username);
+		console_log('... ... req.body.password=' + req.body.password);
 		res.location('/postlogin');
 		res.status(303).send('... app.post login completed');
 	});
 
 	app.get('/logout', (req, res) => {
-		console.log('... logout');
+		console_log('... logout');
 		req.logOut();
 		req.session.destroy();
 		res.redirect('./');
@@ -219,7 +230,7 @@ async function mainapp() {
 
 	/*
 	app.post('/login', (req, res, next)=>{
-		console.log('... app.post postlogin ');
+		console_log('... app.post postlogin ');
 		passport.authenticate('local', {
 			successRedirect:'./',
 			failureRedirect:'./login',
@@ -234,10 +245,10 @@ async function mainapp() {
 
 	app.get('/pagewithnoa', (req, res) => {
 		if (req.isAuthenticated()) {
-			console.log('.. pagewithnoa is Authenticated');
+			console_log('.. pagewithnoa is Authenticated');
 		}
 		else {
-			console.log('.. pagewithnoa is not Authenticated');
+			console_log('.. pagewithnoa is not Authenticated');
 		}
 		res.send('Page no auth');
 	});
@@ -246,19 +257,19 @@ async function mainapp() {
 	// In this enhanced example, give an array for set of routes.
 
 	app.get(['/pagewitha1', '/pagewitha2'], (req, res, next) => {
-		console.log("app.get pagewitha1[2]");
+		console_log("app.get pagewitha1[2]");
 		if (req.isAuthenticated()) {
-			console.log("... " + req.path + " is Authenticated");
+			console_log("... " + req.path + " is Authenticated");
 			next();
 		}
 		else {
-			console.log("..." + req.path + " is not Authenticated");
+			console_log("..." + req.path + " is not Authenticated");
 			res.redirect('./accessprohibited');
 		}
 	});
 
 	function midlimitedtemp(req, res, next) {
-		console.log('midlimited:START');
+		console_log('midlimited:START');
 		next();
 	}
 	app.get(['/pagewitha1', '/pagewitha2'], midlimited.midlimited);
@@ -275,16 +286,16 @@ async function mainapp() {
 			**/
 		/*****
 		if (req.isAuthenticated()){
-			console.log("... pagewitha is Authenticated");
+			console_log("... pagewitha is Authenticated");
 			res.send('Pagewitha here');
 		}
 		else {
-			console.log("...pagewitha is not Authenticated");
+			console_log("...pagewitha is not Authenticated");
 			res.redirect('./accessprohibited');
 		}
 		****/
 		// Lets rely on middleware for just authentication.
-		console.log("... req=" + stringifysafe(req, null, 2));
+		console_log("... req=" + stringifysafe(req, null, 2));
 		res.send('new Pagewitha1 here');
 	});
 
@@ -308,24 +319,24 @@ async function mainapp() {
 	app.get('/dbstatus', async (req, res) => {
 		let pingStatus = await mongodbops.pingWithCredentials(i, j);
 		// let mongodbContact = pingStatus;
-		console.log('user=' + req.session.user);
+		console_log('user=' + req.session.user);
 		res.json({ 'pingstatus': pingStatus })
 	});
 
 	app.post('/', async (req, res) => {
-		console.log('.../index post reached');
-		console.log(req.body);
-		console.log('The fish equals ' + req.body.fish);
+		console_log('.../index post reached');
+		console_log(req.body);
+		console_log('The fish equals ' + req.body.fish);
 		// res.send('Post index reached');
 		delete req.body.fish;
 		let addRet = await conroom.addRoomNoRes(req, res);
-		console.log('addRet=' + addRet);
+		console_log('addRet=' + addRet);
 		res.redirect('./');
 	});
 
 	app.get('/rooms/readone', async (req, res) => {
 		let roomrecord = await mongodbops.getone(uri, null);
-		console.log('roomrecord=' + JSON.stringify(roomrecord));
+		console_log('roomrecord=' + JSON.stringify(roomrecord));
 		let uriNext = "/rooms";
 		let uriPrev = "/rooms";
 		res.links({
@@ -340,7 +351,7 @@ async function mainapp() {
 		let sortcode = 1;
 		// id = "603e3d5281dfda975bb32c0a";
 		let nextid = await mongodbops.getadjacent(mongodbqo.onegreater, sortcode, uri, "houseDB", "roomsCOL", id);
-		console.log("... nextid=" + nextid);
+		console_log("... nextid=" + nextid);
 		res.send("id is " + nextid);
 	});
 
@@ -348,7 +359,7 @@ async function mainapp() {
 		let id = req.params.id;
 		let sortcode = -1;
 		let previd = await mongodbops.getadjacent(mongodbqo.onelesser, sortcode, uri, "houseDB", "roomsCOL", id);
-		console.log("... previd=" + previd);
+		console_log("... previd=" + previd);
 		res.send("id is " + previd);
 	});
 
@@ -356,16 +367,16 @@ async function mainapp() {
 	app.get('/rooms/:id', async (req, res) => {
 		let id = req.params.id;
 		let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-		console.log("fullUrl=" + fullUrl);
+		console_log("fullUrl=" + fullUrl);
 		let reqDoc = await mongodbops.getone(uri, id);
-		console.log("reqDoc=" + JSON.stringify(reqDoc));
+		console_log("reqDoc=" + JSON.stringify(reqDoc));
 
 		let sortcodedescend = -1;
 		let previd = await mongodbops.getadjacent(mongodbqo.onelesser, sortcodedescend, uri, "houseDB", "roomsCOL", id);
 		let sortcodeascend = 1;
 		let nextid = await mongodbops.getadjacent(mongodbqo.onegreater, sortcodeascend, uri, "houseDB", "roomsCOL", id);
-		console.log("... previd=" + previd);
-		console.log("... nextid=" + nextid);
+		console_log("... previd=" + previd);
+		console_log("... nextid=" + nextid);
 		let hostBase = req.protocol + "://" + req.get('host');
 		let uriNext = hostBase + "/rooms/" + nextid;
 		let uriPrev = hostBase + "/rooms/" + previd;
@@ -397,7 +408,7 @@ async function mainapp() {
 				let genPromise = texttoimage.generate('Test png');
 				genPromise.then((bufPng)=>{
 					res.write(bufPng);
-				}).catch((err)=>{console.log('err='+err)});
+				}).catch((err)=>{console_log('err='+err)});
 				*/
 				let bufImg = texttoimage.generateSync('pg', {
 					debug: true,
@@ -412,7 +423,8 @@ async function mainapp() {
 
 				// var img = Buffer.from(bufImg, 'base64');
 				// var img = Buffer.from(bufImg);
-				// console.log('img0..20='+ img.slice(0,20).toString());
+				// console_
+	log('img0..20='+ img.slice(0,20).toString());
 				var base64Data = bufImg.replace(/^data:image\/png;base64,/, '');
 				// var base64Data = imageData1.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
 				var img = Buffer.from(base64Data, 'base64');
@@ -439,12 +451,12 @@ async function mainapp() {
 	);
 
 	app.get('/users', (req, res) => {
-		console.log('... app.get /users');
+		console_log('... app.get /users');
 		res.render('useradd', { dbStatus: mongodbContact, title: 'Express Mongo App', message: 'Add User Here' });
 	});
 
 	app.post('/users', async (req, res) => {
-		console.log('... app.post /users');
+		console_log('... app.post /users');
 		await conuser.addUser(req, res);
 	});
 
@@ -455,24 +467,24 @@ async function mainapp() {
 	 * 
 	 */
 	app.get('/limited', (req,res)=>{
-		console.log('... app.get /limited');
+		console_log('... app.get /limited');
 		res.render('limitedadd', {
 			dbStatus: mongodbContact, title: 'Express Mongo App', message: 'Add Limited Here' });
 		}
 	);
 
 	app.post('/limited', async (req,res)=>{
-		console.log('app.post limited:start');
-		console.log('... req.body='+JSON.stringify(req.body));
+		console_log('app.post limited:start');
+		console_log('... req.body='+JSON.stringify(req.body));
 		let byTimeOfDayParsed = JSON.parse(req.body.byTimeOfDay);
-		console.log('... byTimeOfDayParsed='+byTimeOfDayParsed);
-		console.log('... byTimeOfDayParsed='+JSON.stringify(byTimeOfDayParsed));
+		console_log('... byTimeOfDayParsed='+byTimeOfDayParsed);
+		console_log('... byTimeOfDayParsed='+JSON.stringify(byTimeOfDayParsed));
 		req.body.byTimeOfDay = byTimeOfDayParsed;
 		await conlimited.addLimited(req, res);
 	}
 	);
 	app.get('/limited/user/join', async (req,res)=>{
-		console.log('app.get /limited/user/join');
+		console_log('app.get /limited/user/join');
 		// present the forms to allow joining two collections with a third collection.
 		res.render('limiteduserjoin', {
 			dbStatus: mongodbContact, title: 'Express Mongo App', message:'limited-user-join here'});
@@ -487,9 +499,9 @@ async function mainapp() {
 	 *  selectlimited
 	 */
 	app.post('/limited/user/join', async(req, res)=>{
-		console.log('app.post /limited/user/join');
-		console.log('... selectuser='+ req.body.selectuser);
-		console.log('... selectlimited='+req.body.selectlimited);
+		console_log('app.post /limited/user/join');
+		console_log('... selectuser='+ req.body.selectuser);
+		console_log('... selectlimited='+req.body.selectlimited);
 		await conlimiteduserjoin.postLimitedUserJoin(req, res);
 		// res.send('l u join processed');
 
@@ -505,7 +517,7 @@ async function mainapp() {
 	 *  parameters used.
 	 */
 	app.get('/userall', async (req, res)=>{
-		console.log("app get /userall");
+		console_log("app get /userall");
 		let userDocs = await conlimiteduserjoin.getUserAll(req, res);
 		// The following is suitable test data to return.
 		/**
@@ -530,14 +542,14 @@ async function mainapp() {
 	 * in each document.
 	 */
 	app.get('/limitedall', async (req, res)=>{
-		console.log("app get /limitedall");
+		console_log("app get /limitedall");
 		let userDocs = await conlimiteduserjoin.getLimitedAll(req, res);
 		return res.json(userDocs);
 	});
 	
 
 	app.listen(3000, () => {
-		console.log('server started');
+		console_log('server started');
 	});
 }
 

@@ -100,6 +100,31 @@ async function postLimitedUserJoin(req, res) {
 
 }
 
+// Gets all documents in limiteduserjoinCOL
+// collection for which selectuser is the value
+// specified.  In theory, 0 or 1 documents should
+// be returned.
+// @todo possibly include a name value
+// which will allow more specification
+// of documents returned, and thus more
+// limit the number returned.
+async function getLimitedUserJoin(selectuser) {
+	console.log("getLimitedUserJoin:start");
+
+	function processError(err) {
+		console.log('processError: '+err);
+	}
+	let Limiteduserjoin = produceLimiteduserjoin();
+
+
+	let allDocs = await Limiteduserjoin.find({selectuser:selectuser}).catch(processError);
+
+	// Assume no error if this point is reached.
+	console.log("getLimitedUserJoin:allDocs="+JSON.stringify(allDocs));
+	return allDocs;
+}
+
 exports.getLimitedAll = getLimitedAll;
 exports.getUserAll = getUserAll;
 exports.postLimitedUserJoin = postLimitedUserJoin;
+exports.getLimitedUserJoin = getLimitedUserJoin;

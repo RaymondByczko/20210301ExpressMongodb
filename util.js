@@ -1,4 +1,12 @@
-
+function console_log(x){
+	let clog=process.env.CLOG;
+	if (clog) {
+		console.log(x);
+	} else {
+		const noop=()=>{};
+		noop();
+	}
+}
 function uri(){
 	let i=process.env.I;
 	let j=process.env.J;
@@ -10,12 +18,12 @@ function uri(){
 
 function lookfor(prop1, after) {
 	return (req,res,next)=>{
-		console.log(after)
+		console_log(after)
 		if (req[prop1]){
-			console.log("... " + prop1 + " exists");
+			console_log("... " + prop1 + " exists");
 		}
 		else {
-			console.log("... " + prop1 + " does not exist");
+			console_log("... " + prop1 + " does not exist");
 		}
 		next();
 	};

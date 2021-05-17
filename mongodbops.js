@@ -1,6 +1,16 @@
 const { MongoClient } = require("mongodb");
 const mongodbqo = require("./mongodbqo");
 
+function console_log(x){
+	let clog=process.env.CLOG;
+	if (clog) {
+		console.log(x);
+	} else {
+		const noop=()=>{};
+		noop();
+	}
+}
+
 async function ping(uri) {
 	let client = null;
   try {
@@ -9,7 +19,7 @@ async function ping(uri) {
 
     // Establish and verify connection
     await client.db("houseDB").command({ ping: 1 });
-    console.log("Able to ping server");
+    console_log("Able to ping server");
   } finally {
     await client.close();
   }
@@ -20,22 +30,22 @@ async function pingWithCredentials(U,P)
 let uri = "mongodb+srv://"+U+":" + P+"@cluster0.c2u9s.mongodb.net/houseDB?retryWrites=true&w=majority";
 
 let mongodbContact = "beforeping";
-console.log("mongodbContact(INI)="+mongodbContact);
+console_log("mongodbContact(INI)="+mongodbContact);
 await ping(uri).catch((err)=>{
-	console.log('mongodbContact(CATCH):'+mongodbContact);
+	console_log('mongodbContact(CATCH):'+mongodbContact);
 	mongodbContact = "pingfailed";
 	// console.dir(err);
 }).finally(()=>{
-	console.log("mongodbContact(FINALLY)="+ mongodbContact);
+	console_log("mongodbContact(FINALLY)="+ mongodbContact);
 	if (mongodbContact == "pingfailed"){
-		console.log("pingfailed detected");
+		console_log("pingfailed detected");
 	}
 	else {
-		console.log("pingfailed not detected");
+		console_log("pingfailed not detected");
 		mongodbContact="pingsuccess";
 	}
 });
-console.log("mongodbContact(LAST)="+mongodbContact);
+console_log("mongodbContact(LAST)="+mongodbContact);
 return mongodbContact;
 }
 //ENHERE
@@ -51,7 +61,7 @@ async function add(uri, houseaddress, roomname) {
 			{ "houseaddress": houseaddress,
 				"roomname": roomname
 				});
-    console.log("Add successfull to server");
+    console_log("Add successfull to server");
   } finally {
     await client.close();
   }
@@ -62,31 +72,31 @@ async function getone(uri, theId) {
 	let onerec = null;
 	try {
 		client = new MongoClient(uri, {useUnifiedTopology: true});
-		console.log('getone:start');
+		console_log('getone:start');
     await client.connect();
-		console.log('... after getone: connect');
+		console_log('... after getone: connect');
 		let query = {};
 		
 		if (theId == null) {
-			console.log('getone: theId is null');
+			console_log('getone: theId is null');
 		}
 		else {
-			console.log('getone: theId is not null');
+			console_log('getone: theId is not null');
 		}
 		
 		query = mongodbqo.onewithid(theId).query;
 		options = mongodbqo.onewithid(theId).options;
 
     onerec = await client.db("houseDB").collection("roomsCOL").findOne(query, options);
-    console.log("Successful getone:onerec="+JSON.stringify(onerec));
-		console.log("onerec._id="+onerec._id);
+    console_log("Successful getone:onerec="+JSON.stringify(onerec));
+		console_log("onerec._id="+onerec._id);
 		// return onerec;
   } finally {
     // Ensures that the client will close when you finish/error
-    console.log("getone: finally");
+    console_log("getone: finally");
 		await client.close();
   }
-	console.log("getone reached here");
+	console_log("getone reached here");
 	return onerec;
 }
 
@@ -95,31 +105,31 @@ async function getone_notused(uri, theId) {
 	let onerec = null;
 	try {
 		client = new MongoClient(uri, {useUnifiedTopology: true});
-		console.log('getone:start');
+		console_log('getone:start');
     await client.connect();
-		console.log('... after getone: connect');
+		console_log('... after getone: connect');
 		let query = {};
 		
 		if (theId == null) {
-			console.log('getone: theId is null');
+			console_log('getone: theId is null');
 		}
 		else {
-			console.log('getone: theId is not null');
+			console_log('getone: theId is not null');
 		}
 		
 		query = mongodbqo.working().query;
 		options = mongodbqo.working().options;
 
     onerec = await client.db("houseDB").collection("roomsCOL").findOne(query, options);
-    console.log("Successful getone:onerec="+JSON.stringify(onerec));
-		console.log("onerec._id="+onerec._id);
+    console_log("Successful getone:onerec="+JSON.stringify(onerec));
+		console_log("onerec._id="+onerec._id);
 		// return onerec;
   } finally {
     // Ensures that the client will close when you finish/error
-    console.log("getone: finally");
+    console_log("getone: finally");
 		await client.close();
   }
-	console.log("getone reached here");
+	console_log("getone reached here");
 	return onerec;
 }
 
@@ -147,16 +157,16 @@ async function getadjacent(prevornext, sortcode, uri, db, coll, theId) {
 	let docs = null;
 	try {
 		client = new MongoClient(uri, {useUnifiedTopology: true});
-		console.log('getadjacent:start');
+		console_log('getadjacent:start');
     await client.connect();
-		console.log('... after getadjacent: connect');
+		console_log('... after getadjacent: connect');
 		let query = {};
 		
 		if (theId == null) {
-			console.log('getadjacent: theId is null');
+			console_log('getadjacent: theId is null');
 		}
 		else {
-			console.log('getadjacent: theId is not null');
+			console_log('getadjacent: theId is not null');
 		}
 		
 		query = prevornext(theId).query;
@@ -165,13 +175,13 @@ async function getadjacent(prevornext, sortcode, uri, db, coll, theId) {
 		// options = mongodbqo.onegreater(theId).options;
 
     docs = await client.db(db).collection(coll).find(query).sort({_id:sortcode}).limit(2).toArray();
-    console.log("Successful getadjacent:docs="+JSON.stringify( docs));
+    console_log("Successful getadjacent:docs="+JSON.stringify( docs));
   } finally {
     // Ensures that the client will close when you finish/error
-    console.log("getadjacent: finally");
+    console_log("getadjacent: finally");
 		await client.close();
   }
-	console.log("getadjacent reached here");
+	console_log("getadjacent reached here");
 	return (docs.length == 2)?docs[1]._id:null;
 }
 /// Added getUser START
@@ -180,31 +190,31 @@ async function getUser(uri,name) {
 	let onerec = null;
 	try {
 		client = new MongoClient(uri, {useUnifiedTopology: true});
-		console.log('getUser:start');
+		console_log('getUser:start');
     await client.connect();
-		console.log('... after getUser: connect');
+		console_log('... after getUser: connect');
 		let query = {};
 		
 		if (name == null) {
-			console.log('getUser: name is null');
+			console_log('getUser: name is null');
 		}
 		else {
-			console.log('getUser: name is not null');
+			console_log('getUser: name is not null');
 		}
 		
 		query = mongodbqo.onewithuser(name).query;
 		options = mongodbqo.onewithuser(name).options;
 
     onerec = await client.db("houseDB").collection("usersCOL").findOne(query, options);
-    console.log("Successful getUser:onerec="+JSON.stringify(onerec));
+    console_log("Successful getUser:onerec="+JSON.stringify(onerec));
 		if (onerec != null) {
-			console.log("getUser: onerec._id="+onerec._id);
+			console_log("getUser: onerec._id="+onerec._id);
 		}
   } finally {
-    console.log("getUser: finally");
+    console_log("getUser: finally");
 		await client.close();
   }
-	console.log("getUser reached here");
+	console_log("getUser reached here");
 	return onerec;
 }
 /// Added getUser END
