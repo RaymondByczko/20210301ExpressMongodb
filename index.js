@@ -5,6 +5,7 @@ const json2html = require("node-json2html");
 const mongodbqo = require("./mongodbqo"); //.working;
 const mongodbops = require("./mongodbops");
 const util = require("./util");
+const console_log = util.console_log;
 const conlogin = require("./controllers/conlogin");
 const texttoimage = require("text-to-image");
 const cors = require('cors');
@@ -13,6 +14,7 @@ const conuser = require("./controllers/conuser");
 const conlimited = require("./controllers/conlimited");
 const conlimiteduserjoin = require("./controllers/conlimiteduserjoin");
 const midlimited = require("./middleware/midlimited");
+
 const pug = require('pug');
 const path = require('path');
 
@@ -29,7 +31,7 @@ var flash = require('connect-flash');
 canvas.registerFont('Playfair.ttf', { family: 'Playfont' });
 // const { registerFont } = require('canvas');
 
-
+/****
 function console_log(x) {
 	let clog=process.env.CLOG;
 	if (clog) {	
@@ -39,6 +41,7 @@ function console_log(x) {
 		noop();
 	}
 }
+****/
 
 async function mainapp() {
 	const app = express();

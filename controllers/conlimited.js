@@ -1,3 +1,4 @@
+const console_log = require('../util').console_log;
 /*
  * This is a controller invoked by the route call back.
  * It provides the major function,
@@ -15,9 +16,9 @@
 const produceLimited  = require('../models/modlimited').produceLimited;
 
 async function addLimited(req, res) {
-	console.log("addLimited:start");
-	console.log("... req.body="+req.body);
-	console.log("... req.body(str)="+JSON.stringify(req.body));
+	console_log("addLimited:start");
+	console_log("... req.body="+req.body);
+	console_log("... req.body(str)="+JSON.stringify(req.body));
 	let Limited = produceLimited();
 	
 	/*
@@ -45,11 +46,11 @@ async function addLimited(req, res) {
 	newLimited.markModified("byTimeOfDay");
 	newLimited.save((err, limited)=>{
 		if (err) {
-			console.log("addLImited:err");
+			console_log("addLImited:err");
 			res.send(err);
 		}
 		else {
-			console.log("addLimited:noerr");
+			console_log("addLimited:noerr");
 			res.json(limited);
 		}
 	})

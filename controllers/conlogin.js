@@ -7,9 +7,11 @@
  * that form.)
  */
 
+const console_log = require('../util').console_log;
+
 function get_login(mongodbContact){
 return (req, res)=>{
-	console.log('... conlogin.get_login');
+	console_log('... conlogin.get_login');
 	
   res.render('login', {dbStatus: mongodbContact, title:'Express Mongo App',message:'Please login here'});
 };

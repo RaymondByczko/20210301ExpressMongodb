@@ -26,6 +26,7 @@
 */
 const mongoose = require('mongoose');
 const util = require('../util');
+const console_log = util.console_log;
 
 let Time = null;
 let TimeRange = null;
@@ -38,10 +39,10 @@ let j=process.env.J;
 let uri = util.uri();
 
 function onMError(err) {
-	console.log("onMError:err="+err);
+	console_log("onMError:err="+err);
 }
 
-console.log("mongoose.connect::prior");
+console_log("mongoose.connect::prior");
 mongoose.connect
 (uri, {useNewUrlParser: true, useUnifiedTopology: true}).catch((err)=>{onMError(err);});
 
@@ -96,15 +97,15 @@ const LimitedSchema = new Schema({
 		default: ()=>({timeStart:{hour:11, minute:22,second:44}, timeEnd: {hour:11,minute:24,second:33}}),
 		required: function() {
 ///sta
-		console.log('INSIDE REQUIRED');
+		console_log('INSIDE REQUIRED');
 		return true;
-		console.log('... byTimeOfDay='+JSON.stringify(this.byTimeOfDay));
-		console.log('... this= '+JSON.stringify(this));
-		console.log('... this._id='+JSON.stringify(this._id));
+		console_log('... byTimeOfDay='+JSON.stringify(this.byTimeOfDay));
+		console_log('... this= '+JSON.stringify(this));
+		console_log('... this._id='+JSON.stringify(this._id));
 		let startTimeSeconds = this.byTimeOfDay.startTime.hour*60*60+this.byTimeOfDay.startTime.minute*60+ this.byTimeOfDay.startTime.second;
 		let endTimeSeconds = this.byTimeOfDay.startTime.hour*60*60+this.byTimeOfDay.startTime.minute*60+ this.byTimeOfDay.startTime.second;
-		console.log("startTimeSeconds="+startTimeSeconds);
-		console.log("endTimeSeconds="+endTimeSeconds);
+		console_log("startTimeSeconds="+startTimeSeconds);
+		console_log("endTimeSeconds="+endTimeSeconds);
 		if (startTimeSeconds < endTimeSeconds) {
 			return true;
 		}

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const util = require('../util');
+const console_log = util.console_log;
 
 let Limiteduserjoin = null;
 
@@ -14,10 +15,10 @@ let uri = util.uri();
 // uri();
 
 function onMError(err) {
-	console.log("onMError:err="+err);
+	console_log("onMError:err="+err);
 }
 
-console.log("mongoose.connect::prior");
+console_log("mongoose.connect::prior");
 mongoose.connect
 (uri, {useNewUrlParser: true, useUnifiedTopology: true}).catch((err)=>{onMError(err);});
 

@@ -134,6 +134,7 @@ function bodyonload() {
 		catch(error=>alert('caught error='+error));
 }
 
+exports.console_log = console_log;
 exports.uri = uri;
 exports.lookfor = lookfor;
 exports.populateUserSelect = populateUserSelect;

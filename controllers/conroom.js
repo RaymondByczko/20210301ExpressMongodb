@@ -8,33 +8,35 @@
 
 const produceRooms  = require('../models/modroom').produceRooms;
 
+const console_log = require('../util').console_log;
+
 async function addRoom(req, res) {
-	console.log("addRoom:start");
+	console_log("addRoom:start");
 	let Rooms = produceRooms();
 	let newRoom = new Rooms(req.body);
 	newRoom.save((err, room)=>{
 		if (err) {
-			console.log("addRoom:err");
+			console_log("addRoom:err");
 			res.send(err);
 		}
 		else {
-			console.log("addRoom:noerr");
+			console_log("addRoom:noerr");
 			res.json(room);
 		}
 	})
 };
 
 async function addRoomNoRes(req, res) {
-	console.log("addRoomNoRes:start");
+	console_log("addRoomNoRes:start");
 	let Rooms = produceRooms();
 	let newRoom = new Rooms(req.body);
 	newRoom.save((err, room)=>{
 		if (err) {
-			console.log("addRoomNoRes:err="+err);
+			console_log("addRoomNoRes:err="+err);
 			return false;
 		}
 		else {
-			console.log("addRoomNoRes:noerr");
+			console_log("addRoomNoRes:noerr");
 			return true;
 		}
 	})

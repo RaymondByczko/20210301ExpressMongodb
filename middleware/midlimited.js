@@ -1,8 +1,9 @@
 const conlimiteduserjoin = require('../controllers/conlimiteduserjoin');
+const console_log = require('../util').console_log;
 
 async function midlimited(req, res, next) {
-		console.log('midlimited:START');
-		console.log('... req.user = ' + req.user);
+		console_log('midlimited:START');
+		console_log('... req.user = ' + req.user);
 		let selectuser = req.user;
 		let docs = await conlimiteduserjoin.getLimitedUserJoin(selectuser);
 		// @todo Do something with docs and

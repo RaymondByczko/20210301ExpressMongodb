@@ -1,6 +1,8 @@
 const { MongoClient } = require("mongodb");
 const mongodbqo = require("./mongodbqo");
 
+const console_log = require('./util').console_log;
+/****
 function console_log(x){
 	let clog=process.env.CLOG;
 	if (clog) {
@@ -10,6 +12,7 @@ function console_log(x){
 		noop();
 	}
 }
+****/
 
 async function ping(uri) {
 	let client = null;
@@ -34,7 +37,7 @@ console_log("mongodbContact(INI)="+mongodbContact);
 await ping(uri).catch((err)=>{
 	console_log('mongodbContact(CATCH):'+mongodbContact);
 	mongodbContact = "pingfailed";
-	// console.dir(err);
+	// console_dir(err);
 }).finally(()=>{
 	console_log("mongodbContact(FINALLY)="+ mongodbContact);
 	if (mongodbContact == "pingfailed"){

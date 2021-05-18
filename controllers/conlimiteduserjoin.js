@@ -18,16 +18,17 @@ const produceUsers = require('../models/moduser').produceUsers;
 
 const produceLimiteduserjoin = require('../models/modlimiteduserjoin').produceLimiteduserjoin;
 
+const console_log = require('../util').console_log;
 /*
  * Gets all Limited documents which have name and _id
  * fields.
  */
 async function getLimitedAll(req, res) {
-	console.log("getLimited:start");
+	console_log("getLimited:start");
 	// console.log("... req.body="+req.body);
 	// console.log("... req.body(str)="+JSON.stringify(req.body));
 	function processError(err) {
-		console.log('processError: '+err);
+		console_log('processError: '+err);
 	}
 	let Limited = produceLimited();
 
@@ -39,16 +40,16 @@ async function getLimitedAll(req, res) {
 	/*
 	newLimited.save((err, limited)=>{
 		if (err) {
-			console.log("getLimited:err");
+			console_log("getLimited:err");
 			res.send(err);
 		}
 		else {
-			console.log("getLimited:noerr");
+			console_log("getLimited:noerr");
 			res.json(limited);
 		}
 	})
 	*/
-	console.log("allDocs="+JSON.stringify(allDocs));
+	console_log("allDocs="+JSON.stringify(allDocs));
 	return allDocs;
 };
 
@@ -57,11 +58,11 @@ async function getLimitedAll(req, res) {
  * @todo This should probably be renamed as: getUserAll.
  */
 async function getUserAll(req, res) {
-	console.log("getUser:start");
-	// console.log("... req.body="+req.body);
-	// console.log("... req.body(str)="+JSON.stringify(req.body));
+	console_log("getUser:start");
+	// console_log("... req.body="+req.body);
+	// console_log("... req.body(str)="+JSON.stringify(req.body));
 	function processError(err) {
-		console.log('processError: '+err);
+		console_log('processError: '+err);
 	}
 	let User = produceUsers();
 	/* Use singular of User. */
@@ -71,7 +72,7 @@ async function getUserAll(req, res) {
 	let allDocs = await User.find({}, ["name", "_id"]).catch(processError);
 
 	// Assume no error if this point is reached.
-	console.log("getUser:allDocs="+JSON.stringify(allDocs));
+	console_log("getUser:allDocs="+JSON.stringify(allDocs));
 	return allDocs;
 };
 
@@ -82,17 +83,17 @@ async function getUserAll(req, res) {
  * to utilize 'add' instead of 'post'.
  */
 async function postLimitedUserJoin(req, res) {
-	console.log("postLimitedUserJoin: start");
+	console_log("postLimitedUserJoin: start");
 		let Limiteduserjoin = produceLimiteduserjoin();
 		//ST
 		let newLUJ = new Limiteduserjoin(req.body);
 		newLUJ.save((err, luj)=>{
 		if (err) {
-			console.log("postLimitedUserJoin:err");
+			console_log("postLimitedUserJoin:err");
 			res.send(err);
 		}
 		else {
-			console.log("postLimitedUserJoin:noerr");
+			console_log("postLimitedUserJoin:noerr");
 			res.json(luj);
 		}
 	})
@@ -109,10 +110,10 @@ async function postLimitedUserJoin(req, res) {
 // of documents returned, and thus more
 // limit the number returned.
 async function getLimitedUserJoin(selectuser) {
-	console.log("getLimitedUserJoin:start");
+	console_log("getLimitedUserJoin:start");
 
 	function processError(err) {
-		console.log('processError: '+err);
+		console_log('processError: '+err);
 	}
 	let Limiteduserjoin = produceLimiteduserjoin();
 
@@ -120,7 +121,7 @@ async function getLimitedUserJoin(selectuser) {
 	let allDocs = await Limiteduserjoin.find({selectuser:selectuser}).catch(processError);
 
 	// Assume no error if this point is reached.
-	console.log("getLimitedUserJoin:allDocs="+JSON.stringify(allDocs));
+	console_log("getLimitedUserJoin:allDocs="+JSON.stringify(allDocs));
 	return allDocs;
 }
 
