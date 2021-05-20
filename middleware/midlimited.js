@@ -1,5 +1,7 @@
 const conlimiteduserjoin = require('../controllers/conlimiteduserjoin');
-const console_log = require('../util').console_log;
+const conlimited = require('../controllers/conlimited');
+
+const console_log = require('../util').produce_console_log("midlimited.js");
 
 async function midlimited(req, res, next) {
 		console_log('midlimited:START');
@@ -9,7 +11,11 @@ async function midlimited(req, res, next) {
 		// @todo Do something with docs and
 		// allow request to proceed to next
 		// middleware, or cancel.
-
+		console_log('...docs='+docs);
+		let selectlimited_id = docs[0].selectlimited;
+		console_log('...selectlimited_id='+selectlimited_id);
+		let limitDoc = await conlimited.getLimited(selectlimited_id);
+		console_log('...limitDoc='+limitDoc);
 		next();
 }
 

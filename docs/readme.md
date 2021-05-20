@@ -59,3 +59,27 @@ Who gives the data to populate*Select?
 A javascript function, bodyonload, is defined which does basically two things.  It utilizes the fetch API to obtain some data using a GET http endpoint.  With that data, it calls one of the populate*Select.
 
 It does this sequence twice, because there is a need to setup two html select.
+
+## Limited and Associated Data
+
+The Limited Schema has various properties, defined by keys.  The keys are a) byGoodLoginAttempts b) byTimeOfDay c) byDayOfWeek d) byTimeTotal e) byNumberOfFilesToUpload f) byByAttempts g) bySizeOfImageUpload.  See the file models/modlimited.js for these keys in the schema.
+
+These keys can be broken down into two groups.  One group is where associated dynamic data will need to be kept.  The other group is where this will not be necessary.
+
+#### The First Group
+
+Lets look at an example of the first group.  The byGoodLoginAttempts is a key that needs associated data.  For some particular user, byGoodLoginAttempts is set to 3 for example.  Before that user logs in, the associated data is 0.  When they login the first time, the associated data is set to 1.  Every time they login, the associated data is incremented in this example.
+
+To actually Limit that user, the associated data must be compared to the limit specified for that user.  When the login attempts reaches 4, the user is denied service (i.e. they are Limited).
+
+Members of the first group will require real time usage to be kept for them.  The usage will be compared to the Limit set in deciding whether they are Limited or not.
+
+#### The Second Group
+
+An example of the second group is byTimeOfDay.  Here, the time of day is not actively recorded.  It is just determined by the application, via a javascript function call etc, and it is compared to the limit established.  If the time returned is outside of the time of day, the user is limited (that is, they cannot use that part of the application).
+
+Members of the second group do not require real time usage to be kept for them.
+
+#### Conclusion for Limited and Associated Data
+
+A LimitedSchema is coded in models/modlimited.  However, with the need to keep usage data for some (but not all) keys in that schema, there is a require for a LimitedUsageSchema.

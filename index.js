@@ -5,7 +5,8 @@ const json2html = require("node-json2html");
 const mongodbqo = require("./mongodbqo"); //.working;
 const mongodbops = require("./mongodbops");
 const util = require("./util");
-const console_log = util.console_log;
+// const console_log = util.console_log;
+const console_log = util.produce_console_log('index.js');
 const conlogin = require("./controllers/conlogin");
 const texttoimage = require("text-to-image");
 const cors = require('cors');
@@ -272,7 +273,7 @@ async function mainapp() {
 	});
 
 	function midlimitedtemp(req, res, next) {
-		console_log('midlimited:START');
+		console_log('midlimitedtemp:START');
 		next();
 	}
 	app.get(['/pagewitha1', '/pagewitha2'], midlimited.midlimited);

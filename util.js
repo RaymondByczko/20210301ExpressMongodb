@@ -1,12 +1,71 @@
 function console_log(x){
 	let clog=process.env.CLOG;
-	if (clog) {
+	let bclog = (clog=="true")?true:false;
+	if (bclog) {
 		console.log(x);
 	} else {
 		const noop=()=>{};
 		noop();
 	}
 }
+// Implementing a closure.  produce_console_log
+// returns a function that mostly acts like
+// console.log, except when it is desired to
+// be a noop.
+//
+// Part of the implementation of acting
+// like a proxy for console.log or noop, is
+// to allow specification where this is valid.
+// It will be allowed for some source files and
+// not others.
+//
+// Part of the enable/disable console.log
+// is to specify the current script in
+// produce_console_log.
+//
+// Then, in a certain environment variable,
+// that is CONSOLELOGENABLED, each and every
+// script basename is specified, if it is
+// to be enabled.  If it is not enabled, it is
+// omitted.
+//
+// The script basenames are colon seperated.
+//
+// All specified scriptnames can be disabled,
+// regarding console.log, and a noop will be
+// used, if CLOG is specified as "true" (string).
+//
+function produce_console_log(scriptName) {
+	let currentScript = scriptName;
+
+	function console_log(x){
+		let clog=process.env.CLOG;
+		let bclog = (clog=="true")?true:false;
+
+		let enabled = false;
+		let enabledScripts = process.env.CONSOLELOGENABLED;
+		let arrayES = enabledScripts.split(':');
+		// console.log('arrayES='+arrayES);
+		// console.log('currentScript='+currentScript);
+		let indexFound = arrayES.indexOf(currentScript);
+		// console.log('enabled='+enabled);
+		if (indexFound != -1) {
+			enabled = true;
+		}
+		// console.log('enabled2='+enabled);
+
+		if (bclog && enabled) {
+			console.log('FULLENABLED');
+			console.log(x);
+		} else {
+			console.log('NOTFULLENABLED');
+			const noop=()=>{};
+			noop();
+		}
+	}
+	return console_log;
+}
+
 function uri(){
 	let i=process.env.I;
 	let j=process.env.J;
@@ -135,6 +194,7 @@ function bodyonload() {
 }
 
 exports.console_log = console_log;
+exports.produce_console_log = produce_console_log;
 exports.uri = uri;
 exports.lookfor = lookfor;
 exports.populateUserSelect = populateUserSelect;

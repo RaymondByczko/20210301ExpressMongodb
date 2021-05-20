@@ -1,7 +1,7 @@
 const { MongoClient } = require("mongodb");
 const mongodbqo = require("./mongodbqo");
 
-const console_log = require('./util').console_log;
+const console_log = require('./util').produce_console_log('mongodbops.js');
 /****
 function console_log(x){
 	let clog=process.env.CLOG;

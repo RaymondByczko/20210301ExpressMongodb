@@ -56,4 +56,30 @@ async function addLimited(req, res) {
 	})
 };
 
+/*
+ * Gets the document in the Limited collection based
+ * on id.
+ */
+async function getLimited(id) {
+	console_log("getLimited:start (conlimited.js)");
+	console_log("... id="+id);
+
+	function processError(err) {
+		console_log('getLimited:processError: '+err);
+	}
+	let Limited = produceLimited();
+
+	// It is assumed a single document is
+	// returned.  It is possible if 0 are
+	// returned.  It is very unlikely more
+	// than 1 is returned. The 'the' in 'theDoc'
+	// implies one.
+	let theDoc = await Limited.findById(id).catch(processError);
+
+	// Assume no error if this point is reached.
+	console_log("getLimited:theDoc="+JSON.stringify(theDoc));
+	return theDoc;
+}
+
 exports.addLimited = addLimited;
+exports.getLimited = getLimited;
