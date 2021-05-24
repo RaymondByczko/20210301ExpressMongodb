@@ -1,10 +1,10 @@
 const produceUsers  = require('../models/moduser').produceUsers;
 const bcryptjs = require('bcryptjs');
 
-const console_log = require('../util').console_log;
+const console_log = require('../util').produce_console_log("conuser.js");
 
 async function addUser(req, res) {
-	console_log("addUser:start");
+	console_log("conuser.js:addUser:start");
 	let Users = produceUsers();
 	console_log("... req.body.name="+req.body.name);
 	// @todo remove the following before production.
@@ -19,11 +19,11 @@ async function addUser(req, res) {
 	let newUser = new Users(req.body);
 	newUser.save((err, user)=>{
 		if (err) {
-			console_log("addUser:err");
+			console_log("... addUser:err");
 			res.send(err);
 		}
 		else {
-			console_log("addUser:noerr");
+			console_log("... addUser:noerr");
 			res.json(user);
 		}
 	})

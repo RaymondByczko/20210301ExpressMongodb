@@ -454,11 +454,15 @@ async function mainapp() {
 	}
 	);
 
+  // Presents a form to add a user.
+	// Its processed by post /users.
 	app.get('/users', (req, res) => {
 		console_log('... app.get /users');
 		res.render('useradd', { dbStatus: mongodbContact, title: 'Express Mongo App', message: 'Add User Here' });
 	});
 
+	// Takes the form data from get /users
+	// and adds the user to the database collection.
 	app.post('/users', async (req, res) => {
 		console_log('... app.post /users');
 		await conuser.addUser(req, res);
