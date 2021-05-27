@@ -1,0 +1,32 @@
+/*
+ * Provides a controller set of functionality to manipulate the UserLimitedUsageJoin collection.
+ * Posting (that is adding) is the first function to add to this controller set.
+ */
+
+const console_log = require("../util").produce_console_log("conuserlimitedusagejoin.js");
+
+const produceUserLimitedUsageJoin = require("../models/moduserlimitedusagejoin").produceUserLimitedUsageJoin;
+
+/*
+ * This posts (or adds) a document into the
+ * UserLimitedUsageJoin collection.
+ * @todo consider changing the name
+ * to utilize 'add' instead of 'post'.
+ */
+async function postUserLimitedUsageJoin(req, res) {
+	console_log("postUserLimitedUsageJoin: start");
+	let UserLimitedUsageJoin = produceUserLimitedUsageJoin();
+	let newULUJ = new UserLimitedUsageJoin(req.body);
+	newULUJ.save((err, uluj) => {
+		if (err) {
+			console_log("postUserLimitedUsageJoin:err");
+			res.send(err);
+		}
+		else {
+			console_log("postUserLimitedUsageJoin:noerr");
+			res.json(uluj);
+		}
+	})
+}
+
+exports.postUserLimitedUsageJoin = postUserLimitedUsageJoin;

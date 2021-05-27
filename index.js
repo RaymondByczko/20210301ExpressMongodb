@@ -14,6 +14,8 @@ const conroom = require("./controllers/conroom");
 const conuser = require("./controllers/conuser");
 const conlimited = require("./controllers/conlimited");
 const conlimiteduserjoin = require("./controllers/conlimiteduserjoin");
+const conuserlimitedusagejoin = require("./controllers/conuserlimitedusagejoin");
+// conuserlimitedusagejoin.postUserLimitedUsageJoin
 const midlimited = require("./middleware/midlimited");
 
 const pug = require('pug');
@@ -465,7 +467,21 @@ async function mainapp() {
 	// and adds the user to the database collection.
 	app.post('/users', async (req, res) => {
 		console_log('... app.post /users');
-		await conuser.addUser(req, res);
+		let sendResponse = false;
+		// When false, prevent conuser.addUser from sending
+		// response.  And just let this function send it.
+		let addUserRet = await conuser.addUser(req, res, sendResponse);
+		// @todo addLimitedUsage only needs a small subset of req.  Possibly change this interface to
+		// use something other than req.
+		let addLimitedUsageRet = await conlimitedusage.addLimitedUsage(req, res, sendResponse);
+
+		// @get id of added document to limitedusage
+		// collection.
+		let postULUJ = await conuserlimitedusagejoin.postUserLimitedUsageJoin(req, res, sendResponse);
+		// @todo Add user-limitedusage document to relevant collection here.
+		if (!sendResponse) {
+			res.send('User added - join');
+		}
 	});
 
 	/*

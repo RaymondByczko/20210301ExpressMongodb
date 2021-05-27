@@ -22,6 +22,7 @@ const console_log = util.produce_console_log("modlimitedusage.js");
 
 let Limitedusage = null
 
+// @todo capitalize u in Usage (name change).
 function produceLimitedusage() {
 	console_log("modlimitedusage.js:produceLimitedusage:start");
 	// let i = process.env.I;

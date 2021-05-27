@@ -3,7 +3,12 @@ const bcryptjs = require('bcryptjs');
 
 const console_log = require('../util').produce_console_log("conuser.js");
 
-async function addUser(req, res) {
+/*
+ * sendResponse: boolean indicating whether to actually 
+ * send the resonse, or just return saved document todo
+ * calling code.
+ */
+async function addUser(req, res, sendResponse) {
 	console_log("conuser.js:addUser:start");
 	let Users = produceUsers();
 	console_log("... req.body.name="+req.body.name);
@@ -20,11 +25,21 @@ async function addUser(req, res) {
 	newUser.save((err, user)=>{
 		if (err) {
 			console_log("... addUser:err");
-			res.send(err);
+			if (sendResponse) {
+				res.send(err);
+			}
+			else {
+				return err;
+			}
 		}
 		else {
 			console_log("... addUser:noerr");
-			res.json(user);
+			if (sendResponse) {
+				res.json(user);
+			}
+			else {
+				return user;
+			}
 		}
 	})
 };
