@@ -12,21 +12,29 @@ const produceUserLimitedUsageJoin = require("../models/moduserlimitedusagejoin")
  * UserLimitedUsageJoin collection.
  * @todo consider changing the name
  * to utilize 'add' instead of 'post'.
+ *
+ * @todo Change signature to include
+ * just document object to be added.
+ * req and res not need.
  */
-async function postUserLimitedUsageJoin(req, res) {
+
+async function postUserLimitedUsageJoin(userLimitedUsageDoc) {
 	console_log("postUserLimitedUsageJoin: start");
 	let UserLimitedUsageJoin = produceUserLimitedUsageJoin();
-	let newULUJ = new UserLimitedUsageJoin(req.body);
-	newULUJ.save((err, uluj) => {
-		if (err) {
-			console_log("postUserLimitedUsageJoin:err");
-			res.send(err);
-		}
-		else {
-			console_log("postUserLimitedUsageJoin:noerr");
-			res.json(uluj);
-		}
-	})
+	if (false) {
+		let newULUJ = new UserLimitedUsageJoin(req.body);
+		newULUJ.save((err, uluj) => {
+			if (err) {
+				console_log("postUserLimitedUsageJoin:err");
+				res.send(err);
+			}
+			else {
+				console_log("postUserLimitedUsageJoin:noerr");
+				res.json(uluj);
+			}
+		})
+	}
+	let joinRet = await UserLimitedUsageJoin.create(userLimitedUsageDoc);
 }
 
 exports.postUserLimitedUsageJoin = postUserLimitedUsageJoin;

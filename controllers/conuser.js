@@ -21,6 +21,7 @@ async function addUser(req, res, sendResponse) {
 	let hash = bcryptjs.hashSync(password, salt);
 	req.body.password=hash;
 
+	/***
 	let newUser = new Users(req.body);
 	newUser.save((err, user)=>{
 		if (err) {
@@ -38,10 +39,14 @@ async function addUser(req, res, sendResponse) {
 				res.json(user);
 			}
 			else {
+				console_log("... user="+user);
 				return user;
 			}
 		}
 	})
+	***/
+	let usersRet = await Users.create(req.body);
+	return usersRet;
 };
 
 exports.addUser = addUser;

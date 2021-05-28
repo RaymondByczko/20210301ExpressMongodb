@@ -23,7 +23,7 @@ const console_log = util.produce_console_log("modlimitedusage.js");
 let Limitedusage = null
 
 // @todo capitalize u in Usage (name change).
-function produceLimitedusage() {
+function produceLimitedUsage() {
 	console_log("modlimitedusage.js:produceLimitedusage:start");
 	// let i = process.env.I;
 	// let j = process.env.J;
@@ -85,4 +85,19 @@ function produceLimitedusage() {
 	return Limitedusage;
 }
 
-exports.produceLimitedusage = produceLimitedusage;
+/*
+ * Provides some data for a default document in the
+ * limitedusageCOL collection.
+ */
+function defaultDocument() {
+	let doc = {
+		byGoodLoginAttempts: 1,
+		byTimeTotal: 1,
+		byNumberFilesToUpload: 1,
+		byBadLoginAttempts: 1
+	}
+	return doc;
+}
+
+exports.produceLimitedUsage = produceLimitedUsage;
+exports.defaultDocument = defaultDocument;

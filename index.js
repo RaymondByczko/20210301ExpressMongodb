@@ -14,8 +14,12 @@ const conroom = require("./controllers/conroom");
 const conuser = require("./controllers/conuser");
 const conlimited = require("./controllers/conlimited");
 const conlimiteduserjoin = require("./controllers/conlimiteduserjoin");
+const conlimitedusage = require("./controllers/conlimitedusage");
 const conuserlimitedusagejoin = require("./controllers/conuserlimitedusagejoin");
 // conuserlimitedusagejoin.postUserLimitedUsageJoin
+
+const modlimitedusage = require("./models/modlimitedusage");
+
 const midlimited = require("./middleware/midlimited");
 
 const pug = require('pug');
@@ -77,21 +81,21 @@ async function mainapp() {
 	// One way of using express.static
 	//  - not active at this time
 	if (false) {
-	app.use(express.static(path.join(__dirname,"css")));
-	app.use(express.static(path.join(__dirname,"webcomponents")));
-	app.use('/limiteduserjoin',express.static(path.join(__dirname,"css")));
-	app.use('/limiteduserjoin', express.static(path.join(__dirname,"webcomponents")));
+		app.use(express.static(path.join(__dirname, "css")));
+		app.use(express.static(path.join(__dirname, "webcomponents")));
+		app.use('/limiteduserjoin', express.static(path.join(__dirname, "css")));
+		app.use('/limiteduserjoin', express.static(path.join(__dirname, "webcomponents")));
 	}
 
 	// A second way of using express.static
 	//  - not active at this time
 	if (false) {
-	app.use(express.static("css"));
-	app.use(express.static("webcomponents"));
-	app.use('/limiteduserjoin', express.static("css"));
-	app.use('/limiteduserjoin', express.static("webcomponents"));
-	app.use('/limited/user', express.static("css"));
-	app.use('/limited/user', express.static("webcomponents"));
+		app.use(express.static("css"));
+		app.use(express.static("webcomponents"));
+		app.use('/limiteduserjoin', express.static("css"));
+		app.use('/limiteduserjoin', express.static("webcomponents"));
+		app.use('/limited/user', express.static("css"));
+		app.use('/limited/user', express.static("webcomponents"));
 	}
 
 	app.use(express.static("css"));
@@ -101,7 +105,7 @@ async function mainapp() {
 	app.use(cors());
 	app.use(bodyParser.urlencoded({ extended: true }));
 	app.use(bodyParser.json());
-	
+
 	app.use((err, req, res, next) => {
 		console_log('err=' + err.stack);
 		res.status(500).send('Something broken');
@@ -430,7 +434,7 @@ async function mainapp() {
 				// var img = Buffer.from(bufImg, 'base64');
 				// var img = Buffer.from(bufImg);
 				// console_
-	log('img0..20='+ img.slice(0,20).toString());
+				log('img0..20=' + img.slice(0, 20).toString());
 				var base64Data = bufImg.replace(/^data:image\/png;base64,/, '');
 				// var base64Data = imageData1.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
 				var img = Buffer.from(base64Data, 'base64');
@@ -456,7 +460,7 @@ async function mainapp() {
 	}
 	);
 
-  // Presents a form to add a user.
+	// Presents a form to add a user.
 	// Its processed by post /users.
 	app.get('/users', (req, res) => {
 		console_log('... app.get /users');
@@ -466,21 +470,38 @@ async function mainapp() {
 	// Takes the form data from get /users
 	// and adds the user to the database collection.
 	app.post('/users', async (req, res) => {
-		console_log('... app.post /users');
-		let sendResponse = false;
-		// When false, prevent conuser.addUser from sending
-		// response.  And just let this function send it.
-		let addUserRet = await conuser.addUser(req, res, sendResponse);
-		// @todo addLimitedUsage only needs a small subset of req.  Possibly change this interface to
-		// use something other than req.
-		let addLimitedUsageRet = await conlimitedusage.addLimitedUsage(req, res, sendResponse);
+		try {
+			const console_log = util.produce_console_log('APP_POST_USERS');
+			console_log('... app.post /users');
+			let sendResponse = false;
+			// When false, prevent conuser.addUser from sending
+			// response.  And just let this function send it.
+			let addUserRet = await conuser.addUser(req, res, sendResponse);
+			let user_id = addUserRet.id;
+			console_log("... addUserRet.id=" + addUserRet.id);
+			let defaultLimitedUsage = modlimitedusage.defaultDocument();
+			// @todo addLimitedUsage only needs a small subset of req.  Possibly change this interface to
+			// use something other than req.
+			let addLimitedUsageRet = await conlimitedusage.addLimitedUsage(defaultLimitedUsage);
+			let limitedUsage_id = addLimitedUsageRet.id;
+			console_log("... limitedUsage_id=" + limitedUsage_id);
 
-		// @get id of added document to limitedusage
-		// collection.
-		let postULUJ = await conuserlimitedusagejoin.postUserLimitedUsageJoin(req, res, sendResponse);
-		// @todo Add user-limitedusage document to relevant collection here.
-		if (!sendResponse) {
-			res.send('User added - join');
+		  let userLimitedUsageDoc = {
+				user:user_id,
+				limitedUsage:limitedUsage_id
+			}
+			// @get id of added document to limitedusage
+			// collection.
+			let postULUJ = await conuserlimitedusagejoin.postUserLimitedUsageJoin(userLimitedUsageDoc);
+			// @todo Add user-limitedusage document to relevant collection here.
+			if (!sendResponse) {
+				res.send('User added - join - success');
+			}
+		}
+		catch (e) {
+			console.log("e=" + e);
+			console.error(e.stack);
+			res.send('User added - join - fail');
 		}
 	});
 
@@ -490,28 +511,30 @@ async function mainapp() {
 	 * then reference a post route to add the data to a mongodb.
 	 * 
 	 */
-	app.get('/limited', (req,res)=>{
+	app.get('/limited', (req, res) => {
 		console_log('... app.get /limited');
 		res.render('limitedadd', {
-			dbStatus: mongodbContact, title: 'Express Mongo App', message: 'Add Limited Here' });
-		}
+			dbStatus: mongodbContact, title: 'Express Mongo App', message: 'Add Limited Here'
+		});
+	}
 	);
 
-	app.post('/limited', async (req,res)=>{
+	app.post('/limited', async (req, res) => {
 		console_log('app.post limited:start');
-		console_log('... req.body='+JSON.stringify(req.body));
+		console_log('... req.body=' + JSON.stringify(req.body));
 		let byTimeOfDayParsed = JSON.parse(req.body.byTimeOfDay);
-		console_log('... byTimeOfDayParsed='+byTimeOfDayParsed);
-		console_log('... byTimeOfDayParsed='+JSON.stringify(byTimeOfDayParsed));
+		console_log('... byTimeOfDayParsed=' + byTimeOfDayParsed);
+		console_log('... byTimeOfDayParsed=' + JSON.stringify(byTimeOfDayParsed));
 		req.body.byTimeOfDay = byTimeOfDayParsed;
 		await conlimited.addLimited(req, res);
 	}
 	);
-	app.get('/limited/user/join', async (req,res)=>{
+	app.get('/limited/user/join', async (req, res) => {
 		console_log('app.get /limited/user/join');
 		// present the forms to allow joining two collections with a third collection.
 		res.render('limiteduserjoin', {
-			dbStatus: mongodbContact, title: 'Express Mongo App', message:'limited-user-join here'});
+			dbStatus: mongodbContact, title: 'Express Mongo App', message: 'limited-user-join here'
+		});
 	});
 
 	/*
@@ -522,10 +545,10 @@ async function mainapp() {
 	 * 	selectuser
 	 *  selectlimited
 	 */
-	app.post('/limited/user/join', async(req, res)=>{
+	app.post('/limited/user/join', async (req, res) => {
 		console_log('app.post /limited/user/join');
-		console_log('... selectuser='+ req.body.selectuser);
-		console_log('... selectlimited='+req.body.selectlimited);
+		console_log('... selectuser=' + req.body.selectuser);
+		console_log('... selectlimited=' + req.body.selectlimited);
 		await conlimiteduserjoin.postLimitedUserJoin(req, res);
 		// res.send('l u join processed');
 
@@ -540,7 +563,7 @@ async function mainapp() {
 	 *  - will probably be renamed, with possible query
 	 *  parameters used.
 	 */
-	app.get('/userall', async (req, res)=>{
+	app.get('/userall', async (req, res) => {
 		console_log("app get /userall");
 		let userDocs = await conlimiteduserjoin.getUserAll(req, res);
 		// The following is suitable test data to return.
@@ -559,18 +582,18 @@ async function mainapp() {
 		return res.json(userDocs);
 	});
 
-	
+
 	/*
 	 * Returns a json data of all documents in the
 	 * Limited collection.  name and _id are selected
 	 * in each document.
 	 */
-	app.get('/limitedall', async (req, res)=>{
+	app.get('/limitedall', async (req, res) => {
 		console_log("app get /limitedall");
 		let userDocs = await conlimiteduserjoin.getLimitedAll(req, res);
 		return res.json(userDocs);
 	});
-	
+
 
 	app.listen(3000, () => {
 		console_log('server started');
