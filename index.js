@@ -476,7 +476,7 @@ async function mainapp() {
 			let sendResponse = false;
 			// When false, prevent conuser.addUser from sending
 			// response.  And just let this function send it.
-			let addUserRet = await conuser.addUser(req, res, sendResponse);
+			let addUserRet = await conuser.addUser(req.body);
 			let user_id = addUserRet.id;
 			console_log("... addUserRet.id=" + addUserRet.id);
 			let defaultLimitedUsage = modlimitedusage.defaultDocument();
@@ -500,6 +500,15 @@ async function mainapp() {
 		}
 		catch (e) {
 			console.log("e=" + e);
+			console.error("Something for error");
+			if (e.stack) {
+				console.log("e.stack exists");
+			}
+			else {
+				console.log("e.stack does not exist");
+			}
+			let tr = console.trace();
+			console.error("tr="+tr);
 			console.error(e.stack);
 			res.send('User added - join - fail');
 		}
