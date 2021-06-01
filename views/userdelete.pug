@@ -1,0 +1,84 @@
+html
+	head
+		meta(
+			name="viewport" content="width=device-width, initial-scale=1.0"
+		)
+		title= title
+		link(href='style.css' rel='stylesheet'
+		type='text/css')
+		script
+			include ../mongodbops.js
+	body(class='flex-container')
+		DIV(class='dbstatus-parent')
+			DIV(class='dbstatus-success') Database Status
+			if dbStatus == 'pingfailed'
+				DIV(class='dbstatus-failed', id='dbstatus_id') #{dbStatus}
+			else
+				DIV(class='dbstatus-success' id='dbstatus_id') #{dbStatus}
+		DIV
+			BUTTON(class='dbcheck', type='button', onclick="fetch('/dbstatus').then(response => response.json()).then(data => {alert(JSON.stringify(data));document.querySelector('#dbstatus_id').innerHTML = data.pingstatus;})") Check
+		DIV
+			H1(class='h1_class') #{message}
+		DIV
+			form(action='/users' method='delete')
+				label(
+					for='users'
+					class='home-label'
+				) 	Choose user to delete:
+				select(
+					type='text'
+					name='users_id'
+					id='id_select'
+				)
+					option(
+						value="1234"
+					) SomeUserNameA
+					option(
+						value="5678"
+					) OtherUserNameB
+					- for (var i=0; i<userAll.length-1; i++){
+						- if (userAll[i]._id&&userAll[i].name) {
+							option(value=userAll[i]._id) #{userAll[i].name}
+						- }
+					- }
+
+				br()
+				br()
+				input(
+					type='submit'
+					Value='Submit'
+					id='id_input'
+				)
+				br()
+				br()
+				script.
+					async function fetchDelete(users_id) {
+						let url = '/users';
+						let data = {
+							'users_id':users_id
+						};
+						let opt = {
+							method: 'DELETE',
+							headers: {
+								// 'Content-Type':'application/json'
+								'Content-Type':'x-www-form-urlencoded'
+							},
+							data: JSON.stringify(data)
+						}
+						await fetch(url, opt);
+					}
+					async function onInputClick(e) {
+						e.preventDefault();
+						// e.document.q
+						alert("onInputClick:start");
+						let si = document.querySelector('#id_select').selectedIndex;
+						let op = document.querySelector('#id_select').options;
+						// let val = op[si].text;
+						let val = op[si].value;
+						alert("si="+si);
+						alert("val="+val);
+						let retF = await fetchDelete(val);
+						e.stopPropagation();
+						// e.preventDefault();
+					}
+					document.querySelector('#id_input').addEventListener('click', onInputClick);

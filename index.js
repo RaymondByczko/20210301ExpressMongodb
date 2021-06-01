@@ -61,7 +61,8 @@ async function mainapp() {
 
 	let s1 = process.env.S1;
 
-	let pingStatus = await mongodbops.pingWithCredentials(i, j);
+	let pingStatus = await mongodbops.pingWithCredentials(i, j)			const console_log = util.produce_console_log('APP_POST_USERS');
+;
 	let mongodbContact = pingStatus;
 
 	/***
@@ -514,8 +515,29 @@ async function mainapp() {
 		}
 	});
 
+	app.delete('/users', async (req, res)=>{
+		try {
+			console_log('... delete /users');
+			console_log('... ... users_id='+req.body.users_id);
+			res.send('User delete - success');
+		} catch (e) {
+			res.send('User delete - fail)');
+		}
+	});
+
+/// STA-1
+	// Presents a form to delete a user.
+	// Its processed by post /users.
+	app.get('/users/delete', async (req, res) => {
+		console_log('... app.get /users/delete');
+		// Get users here
+		let userAll = await conlimiteduserjoin.getUserAll(req, res);
+		console_log('... userAll='+userAll);
+		res.render('userdelete', { dbStatus: mongodbContact, title: 'Express Mongo App', message: 'Delete User Here', userAll: userAll });
+	});
+//  END-1
 	/*
-	 * Presents the page to enter data into the limited
+	 * Presents the page to enter data into /users/deletethe limited
 	 * collection.  This form will
 	 * then reference a post route to add the data to a mongodb.
 	 * 
