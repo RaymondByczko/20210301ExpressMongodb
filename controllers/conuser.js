@@ -78,4 +78,16 @@ function alternativeUsersCreate(Users, req, res, sendResponse){
 	})
 }
 
+/*
+ * Deletes one document from the User collection
+ * given the id of that document.
+ */
+async function deleteUser(id) {
+	console_log("conuser.js:deleteUser:start");
+	let Users = produceUsers();
+	let retDel = await Users.deleteOne({_id:id});
+	return retDel;
+}
+
 exports.addUser = addUser;
+exports.deleteUser = deleteUser;

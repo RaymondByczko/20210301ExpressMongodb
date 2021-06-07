@@ -36,9 +36,11 @@ html
 					option(
 						value="5678"
 					) OtherUserNameB
-					- for (var i=0; i<userAll.length-1; i++){
+					- console.log("START POPULATE");
+					- for (var i=0; i<=userAll.length-1; i++){
 						- if (userAll[i]._id&&userAll[i].name) {
 							option(value=userAll[i]._id) #{userAll[i].name}
+						-		console.log("#### "+userAll[i].name);
 						- }
 					- }
 
@@ -53,6 +55,7 @@ html
 				br()
 				script.
 					async function fetchDelete(users_id) {
+						try {
 						let url = '/users';
 						let data = {
 							'users_id':users_id
@@ -60,12 +63,17 @@ html
 						let opt = {
 							method: 'DELETE',
 							headers: {
-								// 'Content-Type':'application/json'
-								'Content-Type':'x-www-form-urlencoded'
+								'Content-Type':'application/json'
+								//'Content-Type':'x-www-form-urlencoded'
 							},
-							data: JSON.stringify(data)
+							body: JSON.stringify(data)
 						}
-						await fetch(url, opt);
+						let retFetch = await fetch(url, opt);
+						alert("retFetch="+retFetch);
+						alert("JS(retFetch)="+JSON.stringify(retFetch));
+						} catch (e) {
+							alert("fetchDelete caught");
+						}
 					}
 					async function onInputClick(e) {
 						e.preventDefault();
@@ -77,6 +85,11 @@ html
 						let val = op[si].value;
 						alert("si="+si);
 						alert("val="+val);
+						if (window.fetch) {
+							alert("fetch exists");
+						} else {
+							alert("fetch does not exist");
+						}
 						let retF = await fetchDelete(val);
 						e.stopPropagation();
 						// e.preventDefault();

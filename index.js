@@ -61,8 +61,7 @@ async function mainapp() {
 
 	let s1 = process.env.S1;
 
-	let pingStatus = await mongodbops.pingWithCredentials(i, j)			const console_log = util.produce_console_log('APP_POST_USERS');
-;
+	let pingStatus = await mongodbops.pingWithCredentials(i, j);
 	let mongodbContact = pingStatus;
 
 	/***
@@ -516,12 +515,29 @@ async function mainapp() {
 	});
 
 	app.delete('/users', async (req, res)=>{
+		const console_log = util.produce_console_log('APP_DELETE_USERS');
 		try {
 			console_log('... delete /users');
 			console_log('... ... users_id='+req.body.users_id);
-			res.send('User delete - success');
+			let retDel = await conuser.deleteUser(req.body.users_id);
+			console_log("... ... retDel="+retDel);
+			// res.send('User delete - success');
+			res.status(200).json(
+					{
+						status:"success",
+						origin:"app.delete /users",
+						file: "index.js"
+					}
+			);
 		} catch (e) {
-			res.send('User delete - fail)');
+			// res.send('User delete - fail)');
+			res.status(500).json(
+				{
+					status:"failure",
+					origin:"app.delete /users",
+					file: "index.js"
+				}
+			)
 		}
 	});
 
@@ -529,6 +545,7 @@ async function mainapp() {
 	// Presents a form to delete a user.
 	// Its processed by post /users.
 	app.get('/users/delete', async (req, res) => {
+		const console_log = util.produce_console_log("APP_GET_USERS_DELETE");
 		console_log('... app.get /users/delete');
 		// Get users here
 		let userAll = await conlimiteduserjoin.getUserAll(req, res);
