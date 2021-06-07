@@ -8,6 +8,10 @@ html
 		type='text/css')
 		script
 			include ../mongodbops.js
+		script
+			include ../bro_bundle2.js
+		script
+			include ../bro_temp.js
 	body(class='flex-container')
 		DIV(class='dbstatus-parent')
 			DIV(class='dbstatus-success') Database Status
@@ -54,6 +58,10 @@ html
 				br()
 				br()
 				script.
+					function runAlert() {
+						alert("From runAlert");
+					}
+				script.
 					async function fetchDelete(users_id) {
 						try {
 						let url = '/users';
@@ -93,5 +101,10 @@ html
 						let retF = await fetchDelete(val);
 						e.stopPropagation();
 						// e.preventDefault();
+						alert("getUserAll: before");
+						runAlert();
+						alertBroTemp();
+						let userAll = await bro2.getUserAll(null, null);
+						alert("getUserAll: after");
 					}
 					document.querySelector('#id_input').addEventListener('click', onInputClick);

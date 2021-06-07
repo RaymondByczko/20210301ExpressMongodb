@@ -56,6 +56,9 @@ async function getLimitedAll(req, res) {
 /*
  * Get all User documents with name and _id field.
  * @todo This should probably be renamed as: getUserAll.
+ * @todo This should probably be moved to conuser.js.
+ * @todo This function signature does not
+ * require req, res.  It can be changed.
  */
 async function getUserAll(req, res) {
 	console_log("getUser:start");

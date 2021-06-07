@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "run": "node index.js",
-    "inspect": "node inspect.js"
+    "inspect": "node inspect.js",
+    "bro1": "browserify controllers/conlimiteduserjoin.js -o bro_bundle1.js",
+    "bro2": "browserify bundlesource_conlimiteduserjoin.js -s bro2 -o bro_bundle2.js"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +16,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "browserify": "^17.0.0",
     "canvas": "^2.7.0",
     "connect-flash": "^0.1.1",
     "cors": "^2.8.5",
