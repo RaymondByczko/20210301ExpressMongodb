@@ -34,9 +34,11 @@ async function fetchUserAll() {
             }
             // body: JSON.stringify(data)
         }
-        let retFetch = await fetch(url, opt);
-        alert("retFetch="+retFetch);
-        alert("JS(retFetch)="+JSON.stringify(retFetch));
+        let response = await fetch(url, opt);
+        await alertFetchResponse(response, "fetchUserAll");
+        // alert("retFetch="+retFetch);
+        // alert("JS(retFetch)="+JSON.stringify(retFetch));
+        return response;
     } catch (e) {
         alert("fetchUserAll caught");
     }
@@ -44,9 +46,17 @@ async function fetchUserAll() {
 /*
  * Displays the response to fetch  with a bunch of
  * alerts.  Just an example of what can be done.
+ *
+ * The body of the the original response will be consumed,
+ * via applying the json() method to it.
+ * So we clone it, and use that, preserving this for the client
+ * code of alertFetchResponse.
  */
-async function alertFetchResponse(response) {
+async function alertFetchResponse(responseOriginal, firstAlert="") {
+
+    let response = responseOriginal.clone();
     alert("alertFetchResponse:start");
+    alert(firstAlert);
     alert("response="+response);
     alert("response.headers="+response.headers);
     let i = 0;

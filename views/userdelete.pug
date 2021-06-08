@@ -101,13 +101,17 @@ html
 						} else {
 							alert("fetch does not exist");
 						}
-						let retF = await fetchDelete(val);
+						let response_delete = await fetchDelete(val);
 						e.stopPropagation();
 						// e.preventDefault();
 						alert("getUserAll: before");
 						runAlert();
 						alertBroTemp();
-						let userAll = await bro2.getUserAll(null, null);
-						alert("getUserAll: after");
+						// let userAll = await bro2.getUserAll(null, null);
+						// alert("getUserAll: after");
+						let response_userall = await fetchUserAll();
+						alert("Before response_userall.json()");
+						let userAll = await response_userall.json();
+						alert("After response_userall.json()");
 					}
 					document.querySelector('#id_input').addEventListener('click', onInputClick);
