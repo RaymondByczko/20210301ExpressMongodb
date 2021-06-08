@@ -63,6 +63,7 @@ html
 					}
 				script.
 					async function fetchDelete(users_id) {
+						alert("fetchDelete: start1");
 						try {
 						let url = '/users';
 						let data = {
@@ -78,6 +79,19 @@ html
 						}
 						let retFetch = await fetch(url, opt);
 						alert("retFetch="+retFetch);
+						alert("retFetch.headers="+retFetch.headers);
+						let i = 0;
+						for (var pair of retFetch.headers.entries()){
+							alert("pair0, pair1="+pair[0]+":"+pair[1]);
+							i++;
+							if (i==5) {
+								break;
+							}
+						}
+						alert("retFetch.body="+retFetch.body);
+						let bd = await retFetch.body.json();
+						alert("retFetch.body.json()="+bd);
+						alert("retFetch.status="+retFetch.status);
 						alert("JS(retFetch)="+JSON.stringify(retFetch));
 						} catch (e) {
 							alert("fetchDelete caught");
