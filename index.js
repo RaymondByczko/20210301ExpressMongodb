@@ -104,7 +104,7 @@ async function mainapp() {
 
 	app.use(cors());
 	app.use(bodyParser.urlencoded({ extended: true }));
-	app.use(bodyParser.json());
+	app.use(bodyParser.json({type:"application/json"}));
 
 	app.use((err, req, res, next) => {
 		console_log('err=' + err.stack);
@@ -522,15 +522,32 @@ async function mainapp() {
 			let retDel = await conuser.deleteUser(req.body.users_id);
 			console_log("... ... retDel="+retDel);
 			// res.send('User delete - success');
-			res.status(200).json(
-					{
-						status:"success",
-						origin:"app.delete /users",
-						file: "index.js"
-					}
-			);
+			res.format({
+				'application/json': function() {
+					console_log("... ... ... delete /users format application/json");
+					res.status(200).json(
+						{
+							status:"success",
+							origin:"app.delete /users",
+							file: "index.js"
+						});
+					},
+				'text/csv': function() {
+					console_log("... ... ... delete /users format text/csv");
+					res.status(200).send('Response to text-csv');
+				},
+				'application/sql': function() {
+					console_log("... ... ... delete /users format application/sql");
+					res.status(200).send("selectbbbb");
+				},
+				default: function() {
+					console_log("... ... ... delete /users format DEFAULT");
+					res.status(200).json({default:"ison"});
+				}
+			});
 		} catch (e) {
 			// res.send('User delete - fail)');
+			console_log("... ... ... delete /users catch");
 			res.status(500).json(
 				{
 					status:"failure",

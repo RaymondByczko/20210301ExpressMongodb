@@ -1,17 +1,29 @@
 async function fetchDelete(users_id) {
     debugger;
+		alert("fetchDelete: start");
     try {
         let url = '/users';
         let data = {
             'users_id':users_id
         };
+				// @todo put 'Accept' header of application/json.  This will
+				// be consistent with res.status(200).json
+				// of app.delete('users') (in index.js)
         let opt = {
             method: 'DELETE',
             headers: {
-                'Content-Type':'application/json'
+								// Following is good
+                // 'Content-Type':'application/json',
+								// 'Content-Type': 'text/csv',
                 //'Content-Type':'x-www-form-urlencoded'
+								'Content-Type': 'application/pdf',
+
+								// 'Accept': 'application/json'
+								'Accept': 'application/sql'
             },
-            body: JSON.stringify(data)
+            // Following is correct
+						body: JSON.stringify(data)
+						// body: 'user_id, 4'
         }
         let response = await fetch(url, opt);
         await alertFetchResponse(response);
@@ -20,6 +32,17 @@ async function fetchDelete(users_id) {
         alert("fetchDelete caught");
         // @todo return bad status here.
     }
+}
+
+
+/*
+ * A validation function for fetchDelete, to see
+ * if status is good etc to proceed.  Otherwise,
+ * throw exception. 
+ */
+async function validateDelete(response) {
+	let responseClone = response.clone();
+	let body = await responseClone.json();
 }
 
 async function fetchUserAll() {
