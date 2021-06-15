@@ -1,3 +1,5 @@
+// import {createRequire} from "module";
+// const require = createRequire(import.meta.url);
 const express = require('express');
 const stringifysafe = require('json-stringify-safe');
 const { MongoClient } = require("mongodb");
@@ -21,6 +23,10 @@ const conuserlimitedusagejoin = require("./controllers/conuserlimitedusagejoin")
 const modlimitedusage = require("./models/modlimitedusage");
 
 const midlimited = require("./middleware/midlimited");
+const rfetch = require("./fetch_commonjs");
+
+// import {fetchDelete, validateDelete, fetchUserAll, alertFetchResponse} from './fetch.js';
+// import * as rfetch from './esmodules/fetch.mjs';
 
 const pug = require('pug');
 const path = require('path');
@@ -100,6 +106,7 @@ async function mainapp() {
 
 	app.use(express.static("css"));
 	app.use(express.static("webcomponents"));
+	app.use('/fetch_ecmascriptmodule.js', express.static(__dirname + '/fetch_ecmascriptmodule.js'));
 
 
 	app.use(cors());
@@ -526,11 +533,15 @@ async function mainapp() {
 				'application/json': function() {
 					console_log("... ... ... delete /users format application/json");
 					res.status(200).json(
+
+						rfetch.delete_users_200_json_response()
+						/*
 						{
 							status:"success",
 							origin:"app.delete /users",
 							file: "index.js"
-						});
+						}*/
+						);
 					},
 				'text/csv': function() {
 					console_log("... ... ... delete /users format text/csv");
