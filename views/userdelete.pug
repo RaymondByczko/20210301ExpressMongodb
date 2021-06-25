@@ -17,7 +17,22 @@ html
 		//- script(src='../fetch_ecmascriptmodule.js' type='module' defer)
 		//-script(type="module")
 		//-	include ../fetch_base.js
-		script(type="module" src="../fetch_ecmascriptmodule.js")
+		//- A
+		//-script(type="module" src="../fetch_ecmascriptmodule.js")
+		//- B
+		//- script
+			include ../fetch_ecmascriptmodule.js
+		//- C
+		//-script
+			//-include ../fetch_base.js
+		//-D
+		//- script(src="../fetch_ecmascriptmodule.js")
+		//-E
+		//-script(src="../fetch_base.js")
+		//-F
+		//-script(src="/fetch_base.js")
+		//-G 
+		//-script(src="../fetch_base.js" defer)
 	body(class='flex-container')
 		DIV(class='dbstatus-parent')
 			DIV(class='dbstatus-success') Database Status
@@ -67,8 +82,12 @@ html
 					function runAlert() {
 						alert("From runAlert");
 					}
-				script.
+				script(type="module").
+					import {fetchDelete, validateDelete, fetchUserAll, alertFetchResponse} from '../fetch_ecmascriptmodule.js';
+
+				script(type="module").
 					//- import {fetchDelete, alertFetchResponse} from "../fetch";
+					//- import {fetchDelete, validateDelete, fetchUserAll, alertFetchResponse} from '../fetch_ecmascriptmodule.js';
 
 					async function fetchDeleteNotUsed(users_id) {
 						alert("fetchDeleteNotUsed: start1");
