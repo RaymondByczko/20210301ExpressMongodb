@@ -4,7 +4,10 @@
  */
 /*
  * Revision history
- * 2021-06-29 RByczko Enhanced parameter checking for deleteUser interface.
+ * 2021-06-29, RByczko, Enhanced parameter checking for deleteUser interface.
+ * 2021-06-29, RByczko, Added a number of override functions for getId, all of
+ * which can be used with deleteUser.
+ *
  */
 const produceUsers  = require('../models/moduser').produceUsers;
 const bcryptjs = require('bcryptjs');
@@ -113,5 +116,67 @@ async function deleteUser(id) {
 	return retDel;
 }
 
+/*
+ * Allows us to inject the normal id expected, but if an override
+ * is present, it will use that.  This allows experimental code
+ * to be factored away and preserved, without making the call to
+ * deleteUser messy (with lots of commented out code etc).
+ */
+function getId(normalId, override=null) {
+	if (override == null) {
+		return normalId;
+	}
+	if (typeof(override) == "function" ) {
+		let retOverride = override();
+		return retOveride;
+	}
+	return override;
+}
+
+/*
+ * Help to test more defined interface for conuser.deleteUser.
+ * This returns an empty string.  Most likely an error can be
+ * thrown and picked up by catch.
+ */
+function overrideEmptyString() {
+	return "";
+}
+
+function overrideNumber() {
+	return 5;
+}
+
+/*
+ * Help to test more defined interface for conuser.deleteUser.
+ * This returns an invalid id.  This will probably lead to the
+ * following error observed. "Cast to ObjectId failed for value
+ * "1234" at path "_id" for model "UsersCol".
+ */
+function overrideIdInvalid() {
+	return "1234";
+}
+
+/*
+ * Help to test more defined interface for conuser.deleteUser.
+ */
+function overrideIdCastOkStillInvalid() {
+	return "123456789012345678901234";
+}
+
+function overrideObjectIdInvalid() {
+	return mongoose.Types.ObjectId("123456789012345678901234");
+}
+
+function override12Hex() {
+	return "012345678912";
+}
+
 exports.addUser = addUser;
 exports.deleteUser = deleteUser;
+exports.getId = getId;
+exports.overrideEmptyString = overrideEmptyString;
+exports.overrideNumber = overrideNumber;
+exports.overrideIdInvalid = overrideIdInvalid;
+exports.overrideIdCastOkStillInvalid = overrideIdCastOkStillInvalid;
+exports.overrideObjectIdInvalid = overrideObjectIdInvalid;
+exports.override12Hex = override12Hex;

@@ -11,7 +11,7 @@
  * Testing conuser.deleteUser interface. Added more console_log
  * for debugging. Added file documentation and revision history.
  * @TODO Clean up commented out code for testing the
- * conuser.deleteUser interface.
+ * conuser.deleteUser interface. @DONE 2021-06-29
  */
 // import {createRequire} from "module";
 // const require = createRequire(import.meta.url);
@@ -542,31 +542,9 @@ async function mainapp() {
 		try {
 			console_log('... delete /users');
 			console_log('... ... users_id='+req.body.users_id);
-			// The following code fragment is used to test a more defined
-            // interface for conuser.deleteUser.  Using these, errors will
-            // be thrown and picked up by the catch clause.
-			// req.body.users_id_empty_string = "";
-            // req.body.users_id_number = 5;
-			// let retDel = await conuser.deleteUser(req.body.users_id_number);
-
-
-            // The following string "1234" will lead to the error observed.
-            // error observed: Cast to ObjectId failed for value "1234" at
-            // path "_id" for model "UsersCol"
-            // req.body.users_id_invalid = "1234";
-            // let retDel = await conuser.deleteUser(req.body.users_id_invalid);
-
-            // req.body.users_id_cast_ok_still_invalid = "123456789012345678901234";
-            // let retDel = await conuser.deleteUser(req.body.users_id_cast_ok_still_invalid);
-
-            req.body.users_id_objectid_invalid = mongoose.Types.ObjectId("123456789012345678901234");
-            let retDel = await conuser.deleteUser(req.body.users_id_objectid_invalid);
-
-            // req.body.users_id_cast_ok_still_invalid = "012345678912";
-            // let retDel = await conuser.deleteUser(req.body.users_id_cast_ok_still_invalid);
 
             // The following works well.
-            // let retDel = await conuser.deleteUser(req.body.users_id);
+            let retDel = await conuser.deleteUser(conuser.getId(req.body.users_id));
             console_log("... ... retDel="+retDel);
 			// res.send('User delete - success');
 			res.format({
