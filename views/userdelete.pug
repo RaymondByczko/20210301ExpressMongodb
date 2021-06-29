@@ -1,3 +1,9 @@
+//-
+	This pug template shows a basic interface for deleting an interface.
+//-
+	Revision History
+	2021-06-29, RByczko,  Added this revision history and file documenation.
+	@TODO The code is a bit messy.  A git add will be done and then clean up after.
 html
 	head
 		meta(
@@ -83,11 +89,11 @@ html
 						alert("From runAlert");
 					}
 				script(type="module").
-					import {fetchDelete, validateDelete, fetchUserAll, alertFetchResponse} from '../fetch_ecmascriptmodule.js';
+					//- import {fetchDelete, validateDelete, fetchUserAll, alertFetchResponse} from '../fetch_ecmascriptmodule.js';
 
 				script(type="module").
 					//- import {fetchDelete, alertFetchResponse} from "../fetch";
-					//- import {fetchDelete, validateDelete, fetchUserAll, alertFetchResponse} from '../fetch_ecmascriptmodule.js';
+					import {fetchDelete, validateDelete, fetchUserAll, alertFetchResponse} from '../fetch_ecmascriptmodule.js';
 
 					async function fetchDeleteNotUsed(users_id) {
 						alert("fetchDeleteNotUsed: start1");

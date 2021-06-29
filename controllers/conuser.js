@@ -2,8 +2,13 @@
  * Contains various operations (i.e. functions used to operate
  * on the user collection.
  */
+/*
+ * Revision history
+ * 2021-06-29 RByczko Enhanced parameter checking for deleteUser interface.
+ */
 const produceUsers  = require('../models/moduser').produceUsers;
 const bcryptjs = require('bcryptjs');
+const mongoose = require('mongoose');
 
 const console_log = require('../util').produce_console_log("conuser.js");
 
@@ -80,10 +85,29 @@ function alternativeUsersCreate(Users, req, res, sendResponse){
 
 /*
  * Deletes one document from the User collection
- * given the id of that document.
+ * given the id of that document. id must be
+ * a non-empty string.  An exception will be throw
+ * if a) id is undefined b) id is an empty string
+ * c) id is not of type string.
  */
 async function deleteUser(id) {
 	console_log("conuser.js:deleteUser:start");
+	if (id) {
+
+	}
+	else {
+		throw Error("conuser.js:deleteUser: id not defined")
+	}
+	if (id === "") {
+		throw Error("conuser.js:deleteUser: id is empty string");
+	}
+	if ( !(typeof(id)== "string") || (id instanceof mongoose.Types.ObjectId) )
+	{
+		throw Error("conuser.js:deleteUser id is not a string and is not ObjectId");
+	}
+	// if (typeof(id) !== "string") {
+	//	throw Error("conuser.js:deleteUser: id is not string, it is " + typeof(id));
+	// }
 	let Users = produceUsers();
 	let retDel = await Users.deleteOne({_id:id});
 	return retDel;

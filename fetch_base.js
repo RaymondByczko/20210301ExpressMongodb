@@ -1,6 +1,32 @@
-async function fetchDelete(users_id) {
+/*
+ * Implements various fetch API calls for several operations.
+ * These operations include a) delete based on user_id b) getting
+ * all user documents.
+ *
+ * This is the base for fetch operations.  It needs to be adjusted
+ * for the module approach required.  This could be ecmascript (which
+ * is used by the javascript world via import) or commonjs (which
+ * is used by node, via require).  See prerun under scripts in
+ * package.json.  Basically cat fetch_base.js with fetch_ending_*.js
+ * to obtain what is needed. '*' is either commonjs or ecmascriptmodule.
+ *
+ * A helper is supplied for fetchDelete, that is supplied
+ * to it by client code.  If something is not correct,
+ * via the checking it implements, it will do something
+ * (exception, logging).  That helper is validateDelete.
+ *
+ * Another helper is provided for debugging.  It is:
+ * alertFetchResponse.
+ */
+/* Revision History
+ * 2021-06-29, RByczko, Added file documentation. Adjusted interface
+ * for fetchDelete.  Added a number of alerts for debugging. Adjusted
+ * interface for alertFetchResponse.
+ */
+async function fetchDelete(users_id, validateDelete) {
     debugger;
 		alert("fetchDelete: start");
+		alert("... users_id="+users_id);
     try {
         let url = '/users';
         let data = {
@@ -12,24 +38,26 @@ async function fetchDelete(users_id) {
         let opt = {
             method: 'DELETE',
             headers: {
-								// Following is good
-                // 'Content-Type':'application/json',
-								// 'Content-Type': 'text/csv',
-                //'Content-Type':'x-www-form-urlencoded'
-								'Content-Type': 'application/pdf',
+                // Headers implemented in /users DELETE route.
+                'Content-Type':'application/json',
+                'Accept': 'application/json',
 
-								// 'Accept': 'application/json'
-								'Accept': 'application/sql'
+                /// The following is experimentation only.
+                // 'Content-Type': 'text/csv',
+                // 'Content-Type': 'x-www-form-urlencoded'
+                // 'Content-Type': 'application/pdf',
+                // 'Accept': 'application/sql'
             },
-            // Following is correct
-						body: JSON.stringify(data)
-						// body: 'user_id, 4'
+            body: JSON.stringify(data)
         }
         let response = await fetch(url, opt);
+        validateDelete(response);
         await alertFetchResponse(response);
         return response;
     } catch (e) {
         alert("fetchDelete caught");
+        alert("... e.message="+e.message);
+        alert("... e.stack="+e.stack);
         // @todo return bad status here.
     }
 }
@@ -41,8 +69,10 @@ async function fetchDelete(users_id) {
  * throw exception. 
  */
 async function validateDelete(response) {
+    alert('validateDelete: start');
 	let responseClone = response.clone();
 	let body = await responseClone.json();
+	alert('validateDelete: end');
 }
 
 async function fetchUserAll() {
@@ -75,7 +105,7 @@ async function fetchUserAll() {
  * So we clone it, and use that, preserving this for the client
  * code of alertFetchResponse.
  */
-async function alertFetchResponse(responseOriginal, firstAlert="") {
+async function alertFetchResponse(responseOriginal, firstAlert="",numberHeaders=5) {
 
     let response = responseOriginal.clone();
     alert("alertFetchResponse:start");
@@ -86,10 +116,11 @@ async function alertFetchResponse(responseOriginal, firstAlert="") {
     for (const pair of response.headers.entries()){
         alert("pair0, pair1="+pair[0]+":"+pair[1]);
         i++;
-        if (i===5) {
+        if (i===numberHeaders) {
             break;
         }
     }
+    alert("responseheaders end");
     alert("response.body="+response.body);
     let bd = await response.json();
     alert("response.json()="+JSON.stringify(bd));

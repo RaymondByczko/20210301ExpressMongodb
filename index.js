@@ -1,6 +1,22 @@
+/*
+ * Provides the mainapp which creates an express application.  It is
+ * defined as a async function, so we can then call await.  Especially
+ * with regard to mongodb operations, it is useful to make these await.
+ * Otherwise, call back handlers have to be supplied, and the code becomes
+ * less linear, and less understandable.
+ */
+/*
+ * Revision history
+ * 2021-06-29, RByczko, Recent focus on the /users DELETE route.
+ * Testing conuser.deleteUser interface. Added more console_log
+ * for debugging. Added file documentation and revision history.
+ * @TODO Clean up commented out code for testing the
+ * conuser.deleteUser interface.
+ */
 // import {createRequire} from "module";
 // const require = createRequire(import.meta.url);
 const express = require('express');
+const mongoose = require('mongoose');
 const stringifysafe = require('json-stringify-safe');
 const { MongoClient } = require("mongodb");
 const json2html = require("node-json2html");
@@ -526,21 +542,45 @@ async function mainapp() {
 		try {
 			console_log('... delete /users');
 			console_log('... ... users_id='+req.body.users_id);
-			let retDel = await conuser.deleteUser(req.body.users_id);
-			console_log("... ... retDel="+retDel);
+			// The following code fragment is used to test a more defined
+            // interface for conuser.deleteUser.  Using these, errors will
+            // be thrown and picked up by the catch clause.
+			// req.body.users_id_empty_string = "";
+            // req.body.users_id_number = 5;
+			// let retDel = await conuser.deleteUser(req.body.users_id_number);
+
+
+            // The following string "1234" will lead to the error observed.
+            // error observed: Cast to ObjectId failed for value "1234" at
+            // path "_id" for model "UsersCol"
+            // req.body.users_id_invalid = "1234";
+            // let retDel = await conuser.deleteUser(req.body.users_id_invalid);
+
+            // req.body.users_id_cast_ok_still_invalid = "123456789012345678901234";
+            // let retDel = await conuser.deleteUser(req.body.users_id_cast_ok_still_invalid);
+
+            req.body.users_id_objectid_invalid = mongoose.Types.ObjectId("123456789012345678901234");
+            let retDel = await conuser.deleteUser(req.body.users_id_objectid_invalid);
+
+            // req.body.users_id_cast_ok_still_invalid = "012345678912";
+            // let retDel = await conuser.deleteUser(req.body.users_id_cast_ok_still_invalid);
+
+            // The following works well.
+            // let retDel = await conuser.deleteUser(req.body.users_id);
+            console_log("... ... retDel="+retDel);
 			// res.send('User delete - success');
 			res.format({
 				'application/json': function() {
 					console_log("... ... ... delete /users format application/json");
 					res.status(200).json(
 
-						rfetch.delete_users_200_json_response()
-						/*
+						// rfetch.delete_users_200_json_response()
+						/**/
 						{
 							status:"success",
 							origin:"app.delete /users",
 							file: "index.js"
-						}*/
+						}
 						);
 					},
 				'text/csv': function() {
@@ -559,6 +599,8 @@ async function mainapp() {
 		} catch (e) {
 			// res.send('User delete - fail)');
 			console_log("... ... ... delete /users catch");
+			console_log("... ... ... ... e.message="+e.message);
+			console_log("... ... ... ... e.stack="+e.stack);
 			res.status(500).json(
 				{
 					status:"failure",
