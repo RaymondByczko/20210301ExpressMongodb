@@ -2,7 +2,9 @@
 	This pug template shows a basic interface for deleting an interface.
 //-
 	Revision History
-	2021-06-29, RByczko,  Added this revision history and file documenation.
+	2021-06-29, RByczko, Added this revision history and file documentation.
+	2021-07-08, RByczko, Removed check for fetch. Removed commented out script
+	sections. Removed not used function. Removed: runAlert, alertBroTemp.
 	@TODO The code is a bit messy.  A git add will be done and then clean up after.
 html
 	head
@@ -12,14 +14,11 @@ html
 		title= title
 		link(href='style.css' rel='stylesheet'
 		type='text/css')
-		//- script
-			//- import {fetchDelete, alertFetchResponse} from "../fetch";
 		script
 			include ../mongodbops.js
 		//-script
 		//-	include ../bro_bundle2.js
-		script
-			include ../bro_temp.js
+
 		//- script(src='../fetch_ecmascriptmodule.js' type='module' defer)
 		//-script(type="module")
 		//-	include ../fetch_base.js
@@ -84,39 +83,9 @@ html
 				)
 				br()
 				br()
-				script.
-					function runAlert() {
-						alert("From runAlert");
-					}
 				script(type="module").
-					//- import {fetchDelete, validateDelete, fetchUserAll, alertFetchResponse} from '../fetch_ecmascriptmodule.js';
-
-				script(type="module").
-					//- import {fetchDelete, alertFetchResponse} from "../fetch";
 					import {fetchDelete, validateDelete, fetchUserAll, alertFetchResponse} from '../fetch_ecmascriptmodule.js';
 
-					async function fetchDeleteNotUsed(users_id) {
-						alert("fetchDeleteNotUsed: start1");
-						try {
-						let url = '/users';
-						let data = {
-							'users_id':users_id
-						};
-						let opt = {
-							method: 'DELETE',
-							headers: {
-								'Content-Type':'application/json'
-								//'Content-Type':'x-www-form-urlencoded'
-							},
-							body: JSON.stringify(data)
-						}
-						let response = await fetch(url, opt);
-						await alertFetchResponse(response);
-
-						} catch (e) {
-							alert("fetchDelete caught");
-						}
-					}
 					async function onInputClick(e) {
 						e.preventDefault();
 						// e.document.q
@@ -127,17 +96,10 @@ html
 						let val = op[si].value;
 						alert("si="+si);
 						alert("val="+val);
-						if (window.fetch) {
-							alert("fetch exists");
-						} else {
-							alert("fetch does not exist");
-						}
 						let response_delete = await fetchDelete(val, validateDelete);
 						e.stopPropagation();
 						// e.preventDefault();
 						alert("getUserAll: before");
-						runAlert();
-						alertBroTemp();
 						// let userAll = await bro2.getUserAll(null, null);
 						// alert("getUserAll: after");
 						let response_userall = await fetchUserAll();
