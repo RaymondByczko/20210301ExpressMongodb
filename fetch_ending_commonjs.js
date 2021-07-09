@@ -6,3 +6,4 @@ module.exports.fetchDelete = fetchDelete;
 module.exports.validateDelete = validateDelete;
 module.exports.fetchUserAll = fetchUserAll;
 module.exports.alertFetchResponse = alertFetchResponse;
+module.exports.idInUserAll = idInUserAll;

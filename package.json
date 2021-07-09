@@ -7,6 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prerun": "cat fetch_base.js fetch_ending_commonjs.js > fetch_commonjs.js; cat fetch_base.js fetch_ending_ecmascriptmodule.js > fetch_ecmascriptmodule.js",
     "run": "node index.js",
+    "movefetch1": "mv fetch_ecmascriptmodule.js fetch_ecmascriptmodule.js.`date +%s` 2>/dev/null||exit 0",
+    "movefetch2": "mv fetch_commonjs.js fetch_commonjs.js.`date +%s` 2>/dev/null||exit 0",
     "inspect": "node inspect.js",
     "bro1": "browserify controllers/conlimiteduserjoin.js -o bro_bundle1.js",
     "bro2": "browserify bundlesource_conlimiteduserjoin.js -s bro2 -o bro_bundle2.js"

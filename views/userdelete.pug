@@ -6,6 +6,7 @@
 	2021-07-08, RByczko, Removed check for fetch. Removed commented out script
 	sections. Removed not used function. Removed: runAlert, alertBroTemp.
 	@TODO The code is a bit messy.  A git add will be done and then clean up after.
+	2021-07-09, RByczko, Incorporated idInUserAll.  Some code cleanup.
 html
 	head
 		meta(
@@ -84,7 +85,7 @@ html
 				br()
 				br()
 				script(type="module").
-					import {fetchDelete, validateDelete, fetchUserAll, alertFetchResponse} from '../fetch_ecmascriptmodule.js';
+					import {fetchDelete, validateDelete, fetchUserAll, alertFetchResponse, idInUserAll} from '../fetch_ecmascriptmodule.js';
 
 					async function onInputClick(e) {
 						e.preventDefault();
@@ -99,13 +100,20 @@ html
 						let response_delete = await fetchDelete(val, validateDelete);
 						e.stopPropagation();
 						// e.preventDefault();
-						alert("getUserAll: before");
-						// let userAll = await bro2.getUserAll(null, null);
-						// alert("getUserAll: after");
+						alert("fetchUserAll: before");
 						let response_userall = await fetchUserAll();
 						alert("Before response_userall.json()");
 						let userAll = await response_userall.json();
-						alert("After response_userall.json()");
+						let idPresent = idInUserAll(val /*"60e75ef0ecdca54e026e4651"*/, userAll);
+						if (!idPresent) {
+							alert("user deleted");
+							document.querySelector('#id_select').remove(si);
+						}
+						else {
+							alert("user not deleted");
+						}
+						alert("idPresent="+idPresent);
+						alert("onInputClick:end");
 					}
 					document.querySelector('#id_input').addEventListener('click', onInputClick);
 		// script(src='../fetch_ecmascriptmodule.js' type='module')

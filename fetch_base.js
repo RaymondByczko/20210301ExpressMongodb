@@ -22,6 +22,7 @@
  * 2021-06-29, RByczko, Added file documentation. Adjusted interface
  * for fetchDelete.  Added a number of alerts for debugging. Adjusted
  * interface for alertFetchResponse.
+ * 2021-07-09, RByczko, Added function idInUserAll.
  */
 async function fetchDelete(users_id, validateDelete) {
     debugger;
@@ -126,4 +127,33 @@ async function alertFetchResponse(responseOriginal, firstAlert="",numberHeaders=
     alert("response.json()="+JSON.stringify(bd));
     alert("response.status="+response.status);
     alert("JS(response)="+JSON.stringify(response));
+}
+
+/*
+ * Checks to see if id is present in userAll.  id is the id of a document
+ * in a mongodb collection.  userAll is an array of users.  This function
+ * returns a boolean, true or false.
+ * @todo This function may not belong here, however its second parameter
+ * userAll is derived from the call to fetchUserAll.  fetchUserAll
+ * is defined in this file, so because of the connection, idInUserAll
+ * lives here.
+ */
+function idInUserAll(id, userAll) {
+    alert("idInUserAll: start");
+    let retValue = null;
+    let produceForEachFunction = function(i){
+        return function(u) {
+            if (u._id === i) {
+                retValue = true
+            }
+            else {
+                retValue = false;
+            }
+        }
+    }
+    let forEachFunction = produceForEachFunction(id);
+    userAll.forEach(forEachFunction);
+    alert("... retValue="+retValue);
+    alert("idInUserAll: end");
+    return retValue;
 }
