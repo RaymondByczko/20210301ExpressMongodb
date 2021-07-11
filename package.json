@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prerun": "cat fetch_base.js fetch_ending_commonjs.js > fetch_commonjs.js; cat fetch_base.js fetch_ending_ecmascriptmodule.js > fetch_ecmascriptmodule.js",
+    "prerun": "cat fetch_base.js fetch_ending_commonjs.js > fetch_commonjs.js; cat fetch_base.js fetch_ending_ecmascriptmodule.js > fetch_ecmascriptmodule.js; cat util_base.js util_ending_ecmascriptmodule.js > util_ecmascriptmodule.js; cat util_base.js util_ending_commonjs.js > util_commonjs.js",
     "run": "node index.js",
     "movefetch1": "mv fetch_ecmascriptmodule.js fetch_ecmascriptmodule.js.`date +%s` 2>/dev/null||exit 0",
     "movefetch2": "mv fetch_commonjs.js fetch_commonjs.js.`date +%s` 2>/dev/null||exit 0",

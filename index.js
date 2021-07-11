@@ -12,6 +12,9 @@
  * for debugging. Added file documentation and revision history.
  * @TODO Clean up commented out code for testing the
  * conuser.deleteUser interface. @DONE 2021-06-29
+ * 2021-07-11, RByczko, used express static for util_ecmascriptmodule.js.
+ * Added experimental  Cache-Control for not storing etc.  Cache-Control
+ * is a work in progress.  See @todo later in this file.
  */
 // import {createRequire} from "module";
 // const require = createRequire(import.meta.url);
@@ -76,6 +79,7 @@ async function mainapp() {
 	const app = express();
 	app.set('view engine', 'pug');
 	app.set('views', './views');
+	app.disable('view cache');
 
 
 	let i = process.env.I;
@@ -123,6 +127,7 @@ async function mainapp() {
 	app.use(express.static("css"));
 	app.use(express.static("webcomponents"));
 	app.use('/fetch_ecmascriptmodule.js', express.static(__dirname + '/fetch_ecmascriptmodule.js'));
+	app.use('/util_ecmascriptmodule.js', express.static(__dirname + '/util_ecmascriptmodule.js'));
 
 
 	app.use(cors());
@@ -598,7 +603,14 @@ async function mainapp() {
 		// Get users here
 		let userAll = await conlimiteduserjoin.getUserAll(req, res);
 		console_log('... userAll='+userAll);
-		res.render('userdelete', { dbStatus: mongodbContact, title: 'Express Mongo App', message: 'Delete User Here', userAll: userAll });
+		// @todo work on Cache-Control here.  Resolve this.
+		// res.setHeader('Cache-control', 'no-cache');
+		// res.setHeader('Cache-Control', 'no-store');
+		// res.setHeader('Cache-Control', 'max-age=1');
+		// res.set('Cache-Control', 'no-store, max-age=10');
+		res.set('Cache-Control', 'no-store, max-age=0');
+		// res.locals.cache = false;
+		res.render('userdelete', { cache: false, dbStatus: mongodbContact, title: 'Express Mongo App', message: 'Delete User Here', userAll: userAll });
 	});
 //  END-1
 	/*

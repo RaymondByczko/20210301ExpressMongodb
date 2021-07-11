@@ -7,6 +7,8 @@
 	sections. Removed not used function. Removed: runAlert, alertBroTemp.
 	@TODO The code is a bit messy.  A git add will be done and then clean up after.
 	2021-07-09, RByczko, Incorporated idInUserAll.  Some code cleanup.
+	2021-07-11, RByczko, Added body onload function, userdelete_body_onload,
+	to inject options into select. Changed for attribute in label for select.
 html
 	head
 		meta(
@@ -39,6 +41,14 @@ html
 		//-script(src="/fetch_base.js")
 		//-G 
 		//-script(src="../fetch_base.js" defer)
+		script(type="module").
+			import {userdelete_testoptions} from '../util_ecmascriptmodule.js';
+			function userdelete_body_onload(event) {
+				userdelete_testoptions();
+				console.log("userdelete_body_onload:end");
+			}
+			// document.querySelector('body').addEventListener('load', userdelete_body_onload);
+			window.addEventListener('load', userdelete_body_onload);
 	body(class='flex-container')
 		DIV(class='dbstatus-parent')
 			DIV(class='dbstatus-success') Database Status
@@ -53,7 +63,7 @@ html
 		DIV
 			form(action='/users' method='delete')
 				label(
-					for='users'
+					for='id_select'
 					class='home-label'
 				) 	Choose user to delete:
 				select(
