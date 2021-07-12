@@ -15,6 +15,8 @@
  * 2021-07-11, RByczko, used express static for util_ecmascriptmodule.js.
  * Added experimental  Cache-Control for not storing etc.  Cache-Control
  * is a work in progress.  See @todo later in this file.
+ * 2021-07-12, RByczko, Added new directory for static, jspublic.
+ *
  */
 // import {createRequire} from "module";
 // const require = createRequire(import.meta.url);
@@ -126,9 +128,7 @@ async function mainapp() {
 
 	app.use(express.static("css"));
 	app.use(express.static("webcomponents"));
-	app.use('/fetch_ecmascriptmodule.js', express.static(__dirname + '/fetch_ecmascriptmodule.js'));
-	app.use('/util_ecmascriptmodule.js', express.static(__dirname + '/util_ecmascriptmodule.js'));
-
+	app.use(express.static("jspublic"));
 
 	app.use(cors());
 	app.use(bodyParser.urlencoded({ extended: true }));
